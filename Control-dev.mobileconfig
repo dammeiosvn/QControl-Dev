@@ -7,7 +7,7 @@
     <key>PayloadDescription</key>
     <string>Bản dành cho nhà phát triển</string>
     <key>PayloadIdentifier</key>
-    <string>com.sentechtipsvn.Control dev.profile</string>
+    <string>com.sentechtipsvn.Control-dev.profile</string>
     <key>PayloadOrganization</key>
     <string>Sentechtipsvn</string>
     <key>PayloadType</key>
@@ -22,7 +22,7 @@
             <key>PayloadType</key>
             <string>com.apple.webClip.managed</string>
             <key>PayloadIdentifier</key>
-            <string>com.sentechtipsvn.Control dev.webclip</string>
+            <string>com.sentechtipsvn.Control-dev.webclip</string>
             <key>PayloadUUID</key>
             <string>4AC845A9-9913-4ED2-B879-CACB4BCA3D1D</string>
             <key>PayloadVersion</key>
