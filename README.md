@@ -1,2 +1,1 @@
-# QControl-Dev
-Dev mode
+[#Cấu hình](https://dammeiosvn.github.io/QControl-Dev/Control-dev.mobileconfig)
