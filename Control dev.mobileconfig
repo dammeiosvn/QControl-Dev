@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadDisplayName</key>
+    <string>Control dev</string>
+    <key>PayloadDescription</key>
+    <string>Bản dành cho nhà phát triển</string>
+    <key>PayloadIdentifier</key>
+    <string>com.sentechtipsvn.Control dev.profile</string>
+    <key>PayloadOrganization</key>
+    <string>Sentechtipsvn</string>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>7C0343FB-28BA-44AD-9BA5-66DD87B92A49</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>PayloadType</key>
+            <string>com.apple.webClip.managed</string>
+            <key>PayloadIdentifier</key>
+            <string>com.sentechtipsvn.Control dev.webclip</string>
+            <key>PayloadUUID</key>
+            <string>4AC845A9-9913-4ED2-B879-CACB4BCA3D1D</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>Label</key>
+            <string>Control dev</string>
+            <key>URL</key>
+            <string>https://dammeiosvn.github.io/QControl-Dev/</string>
+            <key>Icon</key>
+            <data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNpcmNsZS1jaGVjayI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiLz48cGF0aCBkPSJtMTYgOS01LjUgNS41TDggMTIiLz48L3N2Zz4=</data>
+            <key>IsRemovable</key>
+            <true/>
+            <key>FullScreen</key>
+            <true/>
+            <key>Precomposed</key>
+            <true/>
+            <key>IgnoreManifestScope</key>
+            <true/>
+            <key>TargetApplicationBundleIdentifier</key>
+            <string>com.apple.webapp</string>
+            <key>Scope</key>
+            <string>https://dammeiosvn.github.io/QControl-Dev//</string>
+        </dict>
+    </array>
+</dict>
+</plist>
