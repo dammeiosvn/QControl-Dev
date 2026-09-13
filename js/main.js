@@ -6,22 +6,31 @@ const SUPPORTED_LANGS = [
     'tr-TR', 'uk-UA', 'vi-VN', 'zh-CN', 'zh-TW'
 ];
 
+/* ⭐ FIX: match mềm — "vi" sẽ tự khớp "vi-VN", "en" khớp "en-US", v.v. */
+function findBestLang(rawLang) {
+    if (!rawLang) return 'en-US';
+    if (SUPPORTED_LANGS.includes(rawLang)) return rawLang;
+    const lower = rawLang.toLowerCase();
+    const exact = SUPPORTED_LANGS.find(l => l.toLowerCase() === lower);
+    if (exact) return exact;
+    const base = lower.split('-')[0];
+    const baseMatch = SUPPORTED_LANGS.find(l => l.toLowerCase().startsWith(base + '-'));
+    if (baseMatch) return baseMatch;
+    return 'en-US';
+}
+
 function safeSetItem(key, value) {
-    try {
-        localStorage.setItem(key, value);
-        return true;
-    } catch (e) {
-        console.warn('localStorage.setItem failed:', key, e);
-        return false;
-    }
+    try { localStorage.setItem(key, value); return true; }
+    catch (e) { console.warn('localStorage.setItem failed:', key, e); return false; }
 }
 function safeGetItem(key) {
     try { return localStorage.getItem(key); } catch (e) { return null; }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    let userLang = navigator.language || navigator.userLanguage;
-    if (!SUPPORTED_LANGS.includes(userLang)) userLang = 'en-US';
+    const rawLang = navigator.language || navigator.userLanguage || 'en-US';
+    const userLang = findBestLang(rawLang);
+    console.log('[i18n] rawLang =', rawLang, '| resolved =', userLang);
 
     const RTL_LANGS = ['ar', 'fa-IR', 'he'];
     if (RTL_LANGS.includes(userLang.split('-')[0]) || RTL_LANGS.includes(userLang)) {
@@ -42,32 +51,30 @@ document.addEventListener("DOMContentLoaded", async () => {
         return null;
     }
 
-    let fallbackTranslations = await fetchWithCaseFallback(`Language/en-US.json`, `language/en-US.json`) || {};
-    let userTranslations = await fetchWithCaseFallback(`Language/${userLang}.json`, `language/${userLang}.json`) || {};
+    const fallbackTranslations = await fetchWithCaseFallback(`Language/en-US.json`, `language/en-US.json`) || {};
+    const userTranslations = await fetchWithCaseFallback(`Language/${userLang}.json`, `language/${userLang}.json`) || {};
 
+    // Merge: vi-VN ghi đè en-US, en-US ghi đè rỗng
     window.i18nData = { ...fallbackTranslations, ...userTranslations };
+    console.log('[i18n] loaded keys:', Object.keys(window.i18nData).length);
 
     function applyI18n() {
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
             if (window.i18nData[key]) element.innerText = window.i18nData[key];
         });
-
         document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
             const key = element.getAttribute('data-i18n-placeholder');
             if (window.i18nData[key]) element.placeholder = window.i18nData[key];
         });
     }
-
     applyI18n();
-
     window.applyI18n = applyI18n;
 
     try {
         const data = await fetchWithCaseFallback('Data/data.json', 'data/data.json');
-        
         if (!data || !data.buttons) {
-            console.error("Không tải được Data/data.json - Vui lòng kiểm tra lại cấu trúc thư mục Github.");
+            console.error("Không tải được Data/data.json");
             return;
         }
 
@@ -76,7 +83,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         let renderArray = data.buttons;
         const savedOrder = safeGetItem('sttv_iconOrder');
-        
         if (savedOrder) {
             try {
                 const orderIds = JSON.parse(savedOrder);
@@ -94,8 +100,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 btn.className = 'glass-btn';
                 btn.href = item.action || '#';
                 btn.dataset.id = item.id;
-                
-                const localizedTitle = window.i18nData[item.title_key] || item.title || 'Phím tắt';
+
+                // ⭐ FIX: ưu tiên vi-VN, nếu không có thì thử en-US, cuối cùng là "Phím tắt"
+                const localizedTitle = window.i18nData[item.title_key]
+                    || item.title
+                    || 'Phím tắt';
+
                 btn.innerHTML = `<div class="icon-box">${item.svg || ''}</div><span class="label">${localizedTitle}</span>`;
                 container.appendChild(btn);
             });
@@ -104,7 +114,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const btnEditLayout = document.getElementById('btn-edit-layout');
         let editMode = false;
         let selectedSwapNode = null;
-        
+
         if (btnEditLayout) {
             btnEditLayout.addEventListener('click', () => {
                 editMode = !editMode;
@@ -113,12 +123,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 const editLabel = window.i18nData?.['btn_edit_layout'] || 'Sắp xếp';
                 btnEditLayout.innerHTML = editMode ? 'Xong' : `🔄 <span>${editLabel}</span>`;
-                
+
                 if (!editMode && selectedSwapNode) {
                     selectedSwapNode.classList.remove('selected-swap');
                     selectedSwapNode = null;
                 }
-
                 document.querySelectorAll('.glass-btn').forEach(b => {
                     b.onclick = editMode ? (e) => e.preventDefault() : null;
                 });
@@ -129,7 +138,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (!editMode) return;
             const target = e.target.closest('.glass-btn');
             if (!target) return;
-            
+
             if (!selectedSwapNode) {
                 selectedSwapNode = target;
                 target.classList.add('selected-swap');
@@ -142,10 +151,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 selectedSwapNode.parentNode.insertBefore(target, selectedSwapNode);
                 temp.parentNode.insertBefore(selectedSwapNode, temp);
                 temp.parentNode.removeChild(temp);
-                
+
                 selectedSwapNode.classList.remove('selected-swap');
                 selectedSwapNode = null;
-                
+
                 const newOrder = Array.from(container.querySelectorAll('.glass-btn')).map(b => b.dataset.id);
                 safeSetItem('sttv_iconOrder', JSON.stringify(newOrder));
             }
@@ -159,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
         observer.observe(container, { childList: true, subtree: true });
 
-    } catch (e) { 
-        console.error("Lỗi quá trình tải:", e); 
+    } catch (e) {
+        console.error("Lỗi quá trình tải:", e);
     }
 });
