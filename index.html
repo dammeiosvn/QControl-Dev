@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-title" content="Control Panel">
     <link rel="apple-touch-icon" href="icon.png">
     <title>Trung tâm điều khiển - Sentechtipvn</title>
-    <link rel="stylesheet" href="CSS/style.css?v=20">
+    <link rel="stylesheet" href="CSS/style.css?v=21">
 </head>
 <body>
 
@@ -32,7 +32,7 @@
     <div class="app-container grid-mode" id="main-container">
         <div class="app-header" data-i18n="app_title">Quick Control</div>
         <div class="grid-layout" id="control-panel"></div>
-        
+
         <div class="media-player-widget">
             <div class="media-controls">
                 <a class="media-btn" id="btn-media-prev" href="shortcuts://run-shortcut?name=QuickControl&input=text&text=media_prev" aria-label="Previous">
@@ -63,7 +63,7 @@
 
     <div class="settings-overlay" id="settings-overlay"></div>
     <div class="settings-drawer" id="settings-drawer">
-        
+
         <div class="settings-header">
             <button id="close-settings" class="header-btn" aria-label="Close">✕</button>
             <div class="header-title-pill" data-i18n="settings_title">CÀI ĐẶT</div>
@@ -77,7 +77,7 @@
             <button class="settings-tab" data-tab="tab-media" data-i18n="tab_media">🎵 Media</button>
             <button class="settings-tab dev-only" data-tab="tab-shadow" data-i18n="tab_shadow">🌑 Bóng</button>
         </div>
-        
+
         <div class="settings-body">
 
             <div class="settings-tab-content active" data-tab="tab-appearance">
@@ -119,23 +119,23 @@
                 <div class="setting-group highlight-box">
                     <label data-i18n="lbl_quick_palette">🎨 Bảng màu nhanh</label>
                     <div class="color-swatch-row">
-                        <div class="color-swatch" data-label="Nền" data-i18n-title="swatch_bg_main">
+                        <div class="color-swatch">
                             <input type="color" id="val-bg-main" value="#121b22">
                             <span class="swatch-label" data-i18n="swatch_bg_main_short">Nền</span>
                         </div>
-                        <div class="color-swatch" data-label="Chữ" data-i18n-title="swatch_text_color">
+                        <div class="color-swatch">
                             <input type="color" id="val-text-color" value="#ffffff">
                             <span class="swatch-label" data-i18n="swatch_text_color_short">Chữ</span>
                         </div>
-                        <div class="color-swatch" data-label="Nền DS" data-i18n-title="swatch_list_bg">
+                        <div class="color-swatch">
                             <input type="color" id="val-list-bg" value="#1a1a1a">
                             <span class="swatch-label" data-i18n="swatch_list_bg_short">Nền DS</span>
                         </div>
-                        <div class="color-swatch" data-label="Chữ DS" data-i18n-title="swatch_list_text">
+                        <div class="color-swatch">
                             <input type="color" id="val-list-text" value="#ffffff">
                             <span class="swatch-label" data-i18n="swatch_list_text_short">Chữ DS</span>
                         </div>
-                        <div class="color-swatch" data-label="SVG DS" data-i18n-title="swatch_list_svg">
+                        <div class="color-swatch">
                             <input type="color" id="val-list-svg" value="#ffffff">
                             <span class="swatch-label" data-i18n="swatch_list_svg_short">SVG DS</span>
                         </div>
@@ -144,16 +144,14 @@
 
                 <div class="setting-group">
                     <label data-i18n="lbl_bg_image">📱 Hình nền tự chọn</label>
-                    
                     <label class="file-input-wrapper" for="upload-bg">
                         <input type="file" id="upload-bg" accept="image/*">
                         <span class="file-input-btn" data-i18n="btn_choose_file">Chọn tệp</span>
                         <span class="file-input-name" id="file-name-display" data-i18n="file_none_selected">chưa chọn tệp nào</span>
                     </label>
-                    
                     <button type="button" id="clear-bg" class="clear-bg-btn" data-i18n="btn_clear_bg">Xóa ảnh nền</button>
                 </div>
-                
+
                 <div class="setting-group"><label><input type="checkbox" id="toggle-glass"> <span data-i18n="lbl_glassmorphism">Bật Kính mờ</span></label></div>
 
                 <div class="setting-group">
@@ -168,7 +166,7 @@
                     <div class="slider-item" style="margin-top: 10px;"><span class="slider-label" data-i18n="lbl_list_bg_opacity" style="width: 120px;">Đậm nhạt màu nút</span><input type="range" id="val-list-bg-opacity" min="0" max="100" value="10"></div>
                     <label style="margin-top: 10px;"><input type="checkbox" id="toggle-list-frame"> <span data-i18n="lbl_list_frame">Theme cho Danh sách</span></label>
                 </div>
-                
+
                 <div class="setting-group" style="position: relative;">
                     <label data-i18n="lbl_theme_frame">💠 CHỦ ĐỀ <span class="badge-dot" id="badge-theme"></span></label>
                     <div class="theme-grid-picker">
@@ -200,7 +198,6 @@
                     <label data-i18n="lbl_svg_color">🏳️‍🌈 Màu Icon (SVG)</label>
                     <input type="color" id="val-svg-color" value="#ffffff">
                 </div>
-
                 <div class="setting-group">
                     <label data-i18n="lbl_frame_svg_size">🖼️ Khung Icon & SVG</label>
                     <div class="slider-item"><span class="slider-label" data-i18n="lbl_frame_size">Khung</span><input type="range" id="val-frame-size" min="40" max="100" value="60"></div>
@@ -228,7 +225,7 @@
                     </label>
                     <label style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
                         <div style="display: flex; align-items: center; gap: 5px;">
-                            <input type="checkbox" id="toggle-theme-dot" checked> 
+                            <input type="checkbox" id="toggle-theme-dot" checked>
                             <span data-i18n="lbl_theme_dot">Chủ đề núm kéo</span>
                         </div>
                         <button id="btn-thumb-theme" class="btn-plus-theme" type="button"><span>+</span></button>
@@ -276,6 +273,7 @@
         </div>
     </div>
 
+    <!-- ⭐ INFO MODAL MỚI: chỉ hiện 3 nút → bấm "Thông tin" mới mở panel -->
     <div id="info-modal" class="macos-window" style="max-width: 340px;">
         <div class="macos-header">
             <div class="mac-dot close-dot" id="close-info-modal"></div>
@@ -284,7 +282,9 @@
             <div style="font-size: 14px; font-weight: bold; margin-left: 6px; color: #333;" data-i18n="info_title">Quick Control</div>
         </div>
         <div class="macos-body info-body">
-            <div class="info-pill-tabs">
+
+            <!-- Vùng 3 nút chính -->
+            <div class="info-pill-tabs" id="info-pill-tabs">
                 <a href="https://browse.shortcuty.app/user/Sentechtipsvn" target="_blank" rel="noopener" class="info-pill">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
@@ -297,7 +297,7 @@
                     </svg>
                     <span data-i18n="info_pill_contact">Liên hệ</span>
                 </a>
-                <button class="info-pill active" type="button">
+                <button class="info-pill" id="btn-show-info" type="button">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
                         <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
                     </svg>
@@ -305,33 +305,42 @@
                 </button>
             </div>
 
-            <div class="info-content">
-                <h3 class="info-app-name" data-i18n="info_app_name">Quick Control</h3>
-                <div class="info-version-row">
-                    <span data-i18n="info_version_label">Phiên bản</span>
-                    <span class="info-version-value">1.0</span>
-                </div>
-                <div class="info-dev-row">
-                    <span data-i18n="info_dev_label">Phát triển bởi</span>
-                    <a href="https://browse.shortcuty.app/user/Sentechtipsvn" target="_blank" rel="noopener" class="info-dev-link">Sentechtipvn</a>
-                </div>
-                <div class="info-desc-box">
-                    <div class="info-desc-title" data-i18n="info_desc_title">📝 Mô tả chức năng</div>
-                    <p data-i18n="info_desc">Webclip điều khiển đa năng, tích hợp giao diện kính mờ và hệ thống Live Knobs tuỳ biến sống động chuyên nghiệp dành riêng cho iOS.</p>
-                </div>
-                <div class="info-guide-box">
-                    <div class="info-guide-title" data-i18n="info_guide_title">📖 Hướng dẫn sử dụng</div>
-                    <p data-i18n="info_guide_desc">1. Bấm vào nút bất kỳ để kích hoạt tính năng tương ứng (Wi-Fi, Bluetooth, VPN, Đèn pin...).&#10;&#10;2. Nhấn vào biểu tượng ⚙️ ở góc dưới phải để mở bảng Cài đặt tuỳ chỉnh.&#10;&#10;3. Chọn Theme có sẵn trong preset hoặc tự do kéo slider để tùy chỉnh màu sắc, kích thước khung, đổ bóng, kính mờ theo gu của bạn.&#10;&#10;4. Vào mục Giao diện → Xuất để lưu mã cấu hình, Nhập để khôi phục lại khi cần. Nên sao lưu mã trước khi xóa webclip.&#10;&#10;5. Slider âm lượng &amp; độ sáng cần cài Shortcut tên "QuickControl" trong app Shortcuts để hoạt động.</p>
+            <!-- Panel thông tin chi tiết (ẩn mặc định) -->
+            <div class="info-detail-panel" id="info-detail-panel">
+                <button class="info-back-btn" id="info-back-btn" type="button">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                    <span data-i18n="info_back">Quay lại</span>
+                </button>
+
+                <div class="info-content">
+                    <h3 class="info-app-name" data-i18n="info_app_name">Quick Control</h3>
+                    <div class="info-version-row">
+                        <span data-i18n="info_version_label">Phiên bản</span>
+                        <span class="info-version-value">1.0</span>
+                    </div>
+                    <div class="info-dev-row">
+                        <span data-i18n="info_dev_label">Phát triển bởi</span>
+                        <a href="https://browse.shortcuty.app/user/Sentechtipsvn" target="_blank" rel="noopener" class="info-dev-link">Sentechtipvn</a>
+                    </div>
+                    <div class="info-desc-box">
+                        <div class="info-desc-title" data-i18n="info_desc_title">📝 Mô tả chức năng</div>
+                        <p data-i18n="info_desc">Webclip điều khiển đa năng...</p>
+                    </div>
+                    <div class="info-guide-box">
+                        <div class="info-guide-title" data-i18n="info_guide_title">📖 Hướng dẫn sử dụng</div>
+                        <p data-i18n="info_guide_desc">1. Bấm vào nút bất kỳ...&#10;&#10;2. Nhấn vào biểu tượng ⚙️...&#10;&#10;3. Chọn Theme có sẵn...&#10;&#10;4. Vào mục Giao diện → Xuất...&#10;&#10;5. Slider âm lượng &amp; độ sáng...</p>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 
     <script>
         /* ============================================================
            BULLETPROOF INLINE SCRIPT
-           - Tự động bắt sự kiện nút Settings KHÔNG CHỜ file ngoài
-           - Chạy cả khi theme.js/main.js fail
            ============================================================ */
         (function() {
             window.__openSettings = function() {
@@ -351,29 +360,19 @@
                 var btn = document.getElementById('open-settings');
                 var closeBtn = document.getElementById('close-settings');
                 var overlay = document.getElementById('settings-overlay');
-
                 if (btn && !btn.__bound) {
                     btn.__bound = true;
-                    btn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        window.__openSettings();
-                    });
+                    btn.addEventListener('click', function(e) { e.preventDefault(); window.__openSettings(); });
                 }
                 if (closeBtn && !closeBtn.__bound) {
                     closeBtn.__bound = true;
-                    closeBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        window.__closeSettings();
-                    });
+                    closeBtn.addEventListener('click', function(e) { e.preventDefault(); window.__closeSettings(); });
                 }
                 if (overlay && !overlay.__bound) {
                     overlay.__bound = true;
-                    overlay.addEventListener('click', function() {
-                        window.__closeSettings();
-                    });
+                    overlay.addEventListener('click', function() { window.__closeSettings(); });
                 }
             }
-
             bindSettings();
             document.addEventListener('DOMContentLoaded', bindSettings);
             window.addEventListener('load', bindSettings);
@@ -384,9 +383,7 @@
                 if (intro && !intro.classList.contains('dismiss')) {
                     intro.classList.add('dismiss');
                     if (main) main.classList.remove('intro-zoom');
-                    setTimeout(function() {
-                        if (intro) intro.style.display = 'none';
-                    }, 800);
+                    setTimeout(function() { if (intro) intro.style.display = 'none'; }, 800);
                 }
             }
             if (document.readyState === 'loading') {
@@ -401,7 +398,6 @@
             function bindSliders() {
                 var volumeSlider = document.getElementById('sys-volume');
                 var brightnessSlider = document.getElementById('sys-brightness');
-
                 if (volumeSlider && !volumeSlider.__bound) {
                     volumeSlider.__bound = true;
                     volumeSlider.addEventListener('change', function() {
@@ -426,7 +422,7 @@
         })();
     </script>
 
-    <script src="js/theme.js?v=20"></script>
-    <script src="js/main.js?v=20"></script>
+    <script src="js/theme.js?v=21"></script>
+    <script src="js/main.js?v=21"></script>
 </body>
 </html>
