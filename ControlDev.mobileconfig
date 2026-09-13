@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadDisplayName</key>
+    <string>ControlDev</string>
+    <key>PayloadDescription</key>
+    <string>Phiên bản dành cho nhà phát triển</string>
+    <key>PayloadIdentifier</key>
+    <string>com.sentechtipsvn.ControlDev.profile</string>
+    <key>PayloadOrganization</key>
+    <string>Sentechtipsvn</string>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>ABFE8D2E-B366-44DE-908D-45452A95136D</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>PayloadType</key>
+            <string>com.apple.webClip.managed</string>
+            <key>PayloadIdentifier</key>
+            <string>com.sentechtipsvn.ControlDev.webclip</string>
+            <key>PayloadUUID</key>
+            <string>D5248407-0350-48FF-BF03-9341F409B786</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>Label</key>
+            <string>ControlDev</string>
+            <key>URL</key>
+            <string>https://dammeiosvn.github.io/QControl-Dev/</string>
+            <key>Icon</key>
+            <data>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</data>
+            <key>IsRemovable</key>
+            <true/>
+            <key>FullScreen</key>
+            <true/>
+            <key>Precomposed</key>
+            <true/>
+            <key>IgnoreManifestScope</key>
+            <true/>
+            <key>TargetApplicationBundleIdentifier</key>
+            <string>com.apple.webapp</string>
+            <key>Scope</key>
+            <string>https://dammeiosvn.github.io/QControl-Dev//</string>
+        </dict>
+    </array>
+</dict>
+</plist>
