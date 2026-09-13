@@ -7,7 +7,7 @@ const SHADOW_MODES = [
     { id: 'inset', nameKey: 'shadow_inset', name: 'Bóng Chìm',     template: 'inset {x}px {y}px {b}px {s}px {c}' },
     { id: 'outer', nameKey: 'shadow_outer', name: 'Bóng Ngoài',    template: '{x}px {y}px {b}px {s}px {c}' },
     { id: 'soft',  nameKey: 'shadow_soft',  name: 'Mờ Diện Rộng',  template: '{x}px {y}px {b}px {s}px {c}' },
-    { id: 'hard',  nameKey: 'shadow_hard',  name: 'Nổi Khối 3D',   template: '{x}px {y}px {b}px {s}px {c}' },
+    { id: 'hard',  nameKey: 'shadow_hard',  name: 'Nổi Khối 3D',   template: '{x}px {y}px 0px {s}px {c}' },
     { id: 'glow',  nameKey: 'shadow_glow',  name: 'Phát Sáng',     template: '0px 0px {b}px {s}px {c}' },
     { id: 'bottom',    nameKey: 'shadow_bottom',    name: 'Bóng Dưới (Apple)', template: '0px {y}px {b}px {s}px {c}' },
     { id: 'floating',  nameKey: 'shadow_floating',  name: 'Nổi Bay',            template: '0px {b}px {b}px calc(-1 * {s}px) {c}' },
@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         openSettingsBtn.addEventListener('click', (ev) => {
             ev.preventDefault();
             drawerEl.classList.add('open');
+            overlay.classList.add('open');
         });
     }
     if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
@@ -247,23 +248,65 @@ document.addEventListener("DOMContentLoaded", () => {
             themeModal.classList.remove('show'); 
             if (themeOverlay) themeOverlay.classList.remove('show'); 
         };
-        
+
+        /* ========== ⭐ INFO MODAL — 3 NÚT PILL + PANEL CHI TIẾT ========== */
         const infoModal = document.getElementById('info-modal');
         const btnInfo = document.getElementById('btn-info');
-        if (btnInfo && infoModal) btnInfo.onclick = () => { 
-            infoModal.classList.add('show'); 
-            if (themeOverlay) themeOverlay.classList.add('show'); 
-        };
-        const closeInfoModal = document.getElementById('close-info-modal');
-        if (closeInfoModal && infoModal) closeInfoModal.onclick = () => { 
-            infoModal.classList.remove('show'); 
-            if (themeOverlay) themeOverlay.classList.remove('show'); 
-        };
+        const infoPillTabs = document.getElementById('info-pill-tabs');
+        const infoDetailPanel = document.getElementById('info-detail-panel');
+        const btnShowInfo = document.getElementById('btn-show-info');
+        const infoBackBtn = document.getElementById('info-back-btn');
 
+        function resetInfoModalView() {
+            if (infoPillTabs) infoPillTabs.classList.remove('hidden');
+            if (infoDetailPanel) infoDetailPanel.classList.remove('active');
+        }
+
+        // Mở modal Info từ nút (i) ở header
+        if (btnInfo && infoModal) {
+            btnInfo.onclick = () => { 
+                resetInfoModalView();
+                infoModal.classList.add('show'); 
+                if (themeOverlay) themeOverlay.classList.add('show'); 
+            };
+        }
+
+        // Bấm nút "Thông tin" → ẩn 3 pill, hiện panel chi tiết
+        if (btnShowInfo) {
+            btnShowInfo.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (infoPillTabs) infoPillTabs.classList.add('hidden');
+                if (infoDetailPanel) infoDetailPanel.classList.add('active');
+            });
+        }
+
+        // Bấm nút "← Quay lại" → ẩn panel chi tiết, hiện lại 3 pill
+        if (infoBackBtn) {
+            infoBackBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (infoDetailPanel) infoDetailPanel.classList.remove('active');
+                if (infoPillTabs) infoPillTabs.classList.remove('hidden');
+            });
+        }
+
+        // Đóng modal Info
+        const closeInfoModal = document.getElementById('close-info-modal');
+        if (closeInfoModal && infoModal) {
+            closeInfoModal.onclick = () => { 
+                infoModal.classList.remove('show'); 
+                if (themeOverlay) themeOverlay.classList.remove('show');
+                resetInfoModalView();
+            };
+        }
+
+        // Click overlay để đóng tất cả modal
         if (themeOverlay) {
             themeOverlay.onclick = () => { 
                 if (themeModal) themeModal.classList.remove('show'); 
-                if (infoModal) infoModal.classList.remove('show');
+                if (infoModal) {
+                    infoModal.classList.remove('show');
+                    resetInfoModalView();
+                }
                 themeOverlay.classList.remove('show'); 
             };
         }
@@ -849,7 +892,6 @@ document.addEventListener("DOMContentLoaded", () => {
             safeSet('toggle-audio', 'audioFeedback', false, true);
             safeSet('toggle-parallax', 'parallax', false, true);
 
-            // ✅ FIX: khôi phục đầy đủ & đúng key cho media
             safeSet('val-media-width', 'mediaWidth', '90'); 
             safeSet('val-media-bg-opacity', 'mediaBgOpacity', '3');
             safeSet('val-media-btn-size', 'mediaBtnSize', '50'); 
@@ -867,7 +909,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const savedShadowConfig = localStorage.getItem('sttv_shadowConfig');
             if (savedShadowConfig) {
                 try {
-                    // ✅ FIX: tách đúng 2 câu lệnh
                     const shadowState = JSON.parse(savedShadowConfig);
                     SHADOW_MODES.forEach(mode => {
                         if (shadowState[mode.id]) {
