@@ -1,26 +1,23 @@
 const DEV_MODE = true; 
 
-// ⭐ VERSION CONTROL CHO BADGE THÔNG BÁO
-const PRESET_VERSION = 3;   // Tăng số này mỗi khi thêm preset giao diện mới
-const THEME_VERSION = 2;    // Tăng số này mỗi khi thêm Theme SVG mới
+const PRESET_VERSION = 3;
+const THEME_VERSION = 2;
 
 const SHADOW_MODES = [
-    // === 5 MODE GỐC ===
     { id: 'inset', nameKey: 'shadow_inset', name: 'Bóng Chìm',     template: 'inset {x}px {y}px {b}px {s}px {c}' },
     { id: 'outer', nameKey: 'shadow_outer', name: 'Bóng Ngoài',    template: '{x}px {y}px {b}px {s}px {c}' },
     { id: 'soft',  nameKey: 'shadow_soft',  name: 'Mờ Diện Rộng',  template: '{x}px {y}px {b}px {s}px {c}' },
     { id: 'hard',  nameKey: 'shadow_hard',  name: 'Nổi Khối 3D',   template: '{x}px {y}px 0px {s}px {c}' },
     { id: 'glow',  nameKey: 'shadow_glow',  name: 'Phát Sáng',     template: '0px 0px {b}px {s}px {c}' },
-
-    // === 12 MODE MỚI (đã fix an toàn) ===
     { id: 'bottom',    nameKey: 'shadow_bottom',    name: 'Bóng Dưới (Apple)', template: '0px {y}px {b}px {s}px {c}' },
     { id: 'floating',  nameKey: 'shadow_floating',  name: 'Nổi Bay',            template: '0px {b}px {b}px calc(-1 * {s}px) {c}' },
     { id: 'pressed',   nameKey: 'shadow_pressed',   name: 'Ấn Xuống',           template: 'inset 0px {y}px {b}px {s}px {c}' },
     { id: 'pop',       nameKey: 'shadow_pop',       name: 'Pop Bubble',         template: '0px {y}px 0px 0px {c}' },
     { id: 'double',    nameKey: 'shadow_double',    name: 'Viền Kép',           template: '{x}px {y}px {b}px {s}px {c}, inset calc(-1 * {x}px) calc(-1 * {y}px) {b}px 0px rgba(255,255,255,0.15)' },
     { id: 'neumorph',  nameKey: 'shadow_neumorph',  name: 'Neumorphism Nổi',    template: 'calc(-1 * {x}px) calc(-1 * {y}px) {b}px rgba(255,255,255,0.4), {x}px {y}px {b}px {c}' },
-    { id: 'neuro_in',  nameKey: 'shadow_neuro_in',  name: 'Neumorphism Chìm',   template: 'inset calc(-1 * {x}px) calc(-1 * {y}px) {b}px rgba(255,255,255,0.4), inset {x}px {y}px {b}px {c}' },
-    { id: 'neon',      nameKey: 'shadow_neon',      name: 'Neon RGB',           template: '0px 0px {b}px {c}, 0px 0px {b}px {c}, 0px 0px {b}px {c}' },
+    { id: 'neuro_in',  nameKey: 'shadow_neuro_in',  name: 'Neumorphism Chìm',   template: 'inset calc(-1 * {x}px) calc(-1 * {y}px) {b}px rgba(255,255,255,');
+0.4), inset {x}px {y}px {           b}px {c}' },
+    { id: overlay 'neon',      nameKey: 'shadow_ne.classListon',      name: 'Neon RGB',          .add template: '0px 0px {b('}px {c}, 0px open0px {b}px {c}, 0px 0px {b}px {c}' },
     { id: 'long',      nameKey: 'shadow_long',      name: 'Bóng Dài Retro',     template: '{x}px {y}px 0px 0px {c}' },
     { id: 'crisp',     nameKey: 'shadow_crisp',     name: 'Sắc Nét Nhẹ',        template: '0px 1px 2px 0px {c}' },
     { id: 'ripple',    nameKey: 'shadow_ripple',    name: 'Sóng Nước',          template: '0px {y}px {b}px {s}px {c}, 0px {y}px {b}px {s}px {c}' },
@@ -33,10 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const introScreen = document.getElementById('intro-screen');
     const introTextWrapper = document.getElementById('intro-text-wrapper');
 
-    /* ==========================================
-       ⭐ BƯỚC 1: GẮN LISTENER NÚT SETTINGS TRƯỚC TIÊN
-       Đảm bảo dù các bước sau có lỗi gì → nút vẫn hoạt động
-       ========================================== */
+    /* ========== GẮN LISTENER NÚT SETTINGS ========== */
     const drawerEl = document.getElementById('settings-drawer');
     const overlay = document.getElementById('settings-overlay');
     const openSettingsBtn = document.getElementById('open-settings');
@@ -51,15 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
         openSettingsBtn.addEventListener('click', (ev) => {
             ev.preventDefault();
             drawerEl.classList.add('open');
-            overlay.classList.add('open');
         });
     }
     if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
     if (overlay) overlay.addEventListener('click', closeSettings);
 
-    /* ==========================================
-       BƯỚC 2: INTRO LOGIC
-       ========================================== */
+    /* ========== INTRO LOGIC ========== */
     if (introTextWrapper) {
         const effects = ['anim-wave', 'anim-bounce', 'anim-flip'];
         const randomEffect = effects[Math.floor(Math.random() * effects.length)];
@@ -81,11 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!DEV_MODE) document.body.classList.add('standard-mode');
 
-    /* ==========================================
-       BƯỚC 3: TOÀN BỘ LOGIC CÒN LẠI TRONG TRY-CATCH
-       ========================================== */
+    /* ========== TOÀN BỘ LOGIC CÒN LẠI ========== */
     try {
-        /* ========== BADGE VERSION-BASED ========== */
         const badgePreset = document.getElementById('badge-preset');
         const badgeTheme = document.getElementById('badge-theme');
         
@@ -173,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        /* ========== SHADOW CONTROLS - WRAP RIÊNG ĐỂ KHÔNG CRASH ========== */
+        /* ========== SHADOW CONTROLS ========== */
         try {
             const shadowContainer = document.getElementById('shadow-controls');
             if (shadowContainer) {
@@ -334,7 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (e.target.tagName === 'BUTTON' || e.target.type === 'checkbox' || e.target.closest('.theme-chip') || e.target.closest('.theme-chip-more')) playTick(); 
         });
 
-        /* ========== COLOR PICKER KHÔNG BỊ VĂNG ========== */
+        /* ========== COLOR PICKER ========== */
         let colorPickerLock = false;
 
         if (drawerEl) {
@@ -477,7 +465,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return `${r}, ${g}, ${b}`;
         }
 
-        /* ========== ⭐ FIX: updateShadow() CÓ NULL-CHECK ========== */
         function updateShadow() {
             const activeShadows = document.querySelectorAll('input[name="active_shadow"]:checked');
             let combinedShadow = '';
@@ -486,7 +473,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const drawer = document.getElementById(`drawer-${checkbox.value}`);
                     if (!drawer) return;
                     const mode = SHADOW_MODES.find(m => m.id === checkbox.value);
-                    if (!mode || !mode.template) return; // ⭐ Skip nếu không tìm thấy mode
+                    if (!mode || !mode.template) return;
                     
                     const colorEl = drawer.querySelector('.s-c');
                     const opacityEl = drawer.querySelector('.s-o');
@@ -863,12 +850,12 @@ document.addEventListener("DOMContentLoaded", () => {
             safeSet('toggle-audio', 'audioFeedback', false, true);
             safeSet('toggle-parallax', 'parallax', false, true);
 
+            // ✅ FIX: khôi phục đầy đủ & đúng key cho media
             safeSet('val-media-width', 'mediaWidth', '90'); 
-            safeSet('val-media-bg-opacity', 'mediaBgOpacity', '(saved3');
-            safeSet('val-media-btn-size', 'mediaBtnSizeShadow', 'Config50'); 
-            safeSet(');
-val-media-bg-color', 'mediaBg                   Color', '#ffffff');
-            safeSet('val-media SH-btn-color', 'mediaBtnColor', '#ffffff'); 
+            safeSet('val-media-bg-opacity', 'mediaBgOpacity', '3');
+            safeSet('val-media-btn-size', 'mediaBtnSize', '50'); 
+            safeSet('val-media-bg-color', 'mediaBgColor', '#ffffff');
+            safeSet('val-media-btn-color', 'mediaBtnColor', '#ffffff'); 
             safeSet('val-media-svg-color', 'mediaSvgColor', '#ffffff');
             safeSet('toggle-media-theme', 'mediaThemeSync', false, true);
             
@@ -881,7 +868,9 @@ val-media-bg-color', 'mediaBg                   Color', '#ffffff');
             const savedShadowConfig = localStorage.getItem('sttv_shadowConfig');
             if (savedShadowConfig) {
                 try {
-                    const shadowState = JSON.parseADOW_MODES.forEach(mode => {
+                    // ✅ FIX: tách đúng 2 câu lệnh
+                    const shadowState = JSON.parse(savedShadowConfig);
+                    SHADOW_MODES.forEach(mode => {
                         if (shadowState[mode.id]) {
                             const item = shadowState[mode.id];
                             const checkbox = document.querySelector(`input[name="active_shadow"][value="${mode.id}"]`);
@@ -899,7 +888,7 @@ val-media-bg-color', 'mediaBg                   Color', '#ffffff');
                             }
                         }
                     });
-                } catch(e) {}
+                } catch(e) { console.warn('Shadow parse error:', e); }
             }
 
             const initLayout = localStorage.getItem('sttv_layoutMode') || 'grid';
