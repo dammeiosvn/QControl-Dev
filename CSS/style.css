@@ -125,7 +125,7 @@ body.standard-mode .dev-only { display: none !important; }
 .app-container.list-mode.list-frame-active .icon-box svg { fill: var(--svg-color); color: var(--svg-color); width: var(--svg-size); height: var(--svg-size); opacity: var(--svg-opacity); }
 
 /* ============================================
-   MEDIA WIDGET - FIX DISPLAY
+   MEDIA WIDGET
    ============================================ */
 .media-player-widget { 
     margin: 10px auto 30px auto; 
@@ -150,7 +150,6 @@ body.standard-mode .dev-only { display: none !important; }
     gap: 30px; 
 }
 
-/* ⭐ FIX: Media buttons dùng thẻ <a> thay vì <button> */
 .media-btn { 
     display: inline-flex;
     align-items: center; 
@@ -581,33 +580,54 @@ select { width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,
    INFO MODAL
    ============================================ */
 .info-body { padding: 18px 16px 24px !important; text-align: center; }
-.info-pill-tabs { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; flex-wrap: nowrap; }
+
+/* ============================================
+   INFO MODAL — 3 PILL BUTTONS XẾP DỌC
+   ============================================ */
+.info-pill-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 22px;
+    width: 100%;
+}
 .info-pill {
-    padding: 9px 15px;
-    border-radius: 22px;
-    border: 1px solid rgba(0, 122, 255, 0.35);
-    background: rgba(0, 122, 255, 0.08);
+    width: 100%;
+    padding: 13px 20px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(0, 122, 255, 0.35);
+    background: rgba(0, 122, 255, 0.06);
     color: #007aff;
-    font-size: 12.5px;
+    font-size: 14px;
     font-weight: 700;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
     font-family: -apple-system, sans-serif;
     white-space: nowrap;
     display: flex;
     align-items: center;
-    letter-spacing: 0.2px;
+    justify-content: center;
+    gap: 9px;
+    letter-spacing: 0.3px;
     -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.08);
 }
-.info-pill:active, .info-pill.active {
+.info-pill svg {
+    flex-shrink: 0;
+    opacity: 0.9;
+}
+.info-pill:active,
+.info-pill.active {
     background: linear-gradient(135deg, #007aff, #0055cc);
-    color: white;
+    color: #ffffff;
     border-color: transparent;
-    box-shadow: 0 5px 16px rgba(0, 122, 255, 0.5), inset 0 1px 0 rgba(255,255,255,0.3);
-    transform: translateY(-1.5px) scale(1.02);
+    box-shadow: 0 6px 18px rgba(0, 122, 255, 0.45), inset 0 1px 0 rgba(255,255,255,0.3);
+    transform: translateY(-1.5px) scale(1.01);
+}
+.info-pill.active svg,
+.info-pill:active svg {
+    opacity: 1;
 }
 
 .info-content { text-align: center; }
