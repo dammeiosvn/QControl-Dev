@@ -15,9 +15,8 @@ const SHADOW_MODES = [
     { id: 'pop',       nameKey: 'shadow_pop',       name: 'Pop Bubble',         template: '0px {y}px 0px 0px {c}' },
     { id: 'double',    nameKey: 'shadow_double',    name: 'Viền Kép',           template: '{x}px {y}px {b}px {s}px {c}, inset calc(-1 * {x}px) calc(-1 * {y}px) {b}px 0px rgba(255,255,255,0.15)' },
     { id: 'neumorph',  nameKey: 'shadow_neumorph',  name: 'Neumorphism Nổi',    template: 'calc(-1 * {x}px) calc(-1 * {y}px) {b}px rgba(255,255,255,0.4), {x}px {y}px {b}px {c}' },
-    { id: 'neuro_in',  nameKey: 'shadow_neuro_in',  name: 'Neumorphism Chìm',   template: 'inset calc(-1 * {x}px) calc(-1 * {y}px) {b}px rgba(255,255,255,');
-0.4), inset {x}px {y}px {           b}px {c}' },
-    { id: overlay 'neon',      nameKey: 'shadow_ne.classListon',      name: 'Neon RGB',          .add template: '0px 0px {b('}px {c}, 0px open0px {b}px {c}, 0px 0px {b}px {c}' },
+    { id: 'neuro_in',  nameKey: 'shadow_neuro_in',  name: 'Neumorphism Chìm',   template: 'inset calc(-1 * {x}px) calc(-1 * {y}px) {b}px rgba(255,255,255,0.4), inset {x}px {y}px {b}px {c}' },
+    { id: 'neon',      nameKey: 'shadow_neon',      name: 'Neon RGB',           template: '0px 0px {b}px {c}, 0px 0px {b}px {c}, 0px 0px {b}px {c}' },
     { id: 'long',      nameKey: 'shadow_long',      name: 'Bóng Dài Retro',     template: '{x}px {y}px 0px 0px {c}' },
     { id: 'crisp',     nameKey: 'shadow_crisp',     name: 'Sắc Nét Nhẹ',        template: '0px 1px 2px 0px {c}' },
     { id: 'ripple',    nameKey: 'shadow_ripple',    name: 'Sóng Nước',          template: '0px {y}px {b}px {s}px {c}, 0px {y}px {b}px {s}px {c}' },
