@@ -61,14 +61,14 @@ body.standard-mode .dev-only { display: none !important; }
 .app-container.intro-zoom { transform: scale(0.9); opacity: 0; }
 
 /* ============================================
-   ⭐ SLIDER ITEM — CHUẨN XẾP CHỒNG
+   ⭐ SLIDER ITEM
    ============================================ */
 .slider-item { 
     display: flex; 
     flex-direction: column;         
-    align-items: flex-start; /* Ép tiêu đề nằm sát lề trái */
+    align-items: flex-start;
     justify-content: center;
-    gap: 12px; /* Khoảng cách chuẩn giữa tiêu đề và thanh trượt */
+    gap: 12px;
     margin-bottom: 20px; 
     width: 100%; 
     position: relative;
@@ -79,7 +79,7 @@ body.standard-mode .dev-only { display: none !important; }
     font-weight: 500;
     color: rgba(255,255,255,0.9);
     white-space: normal;            
-    text-align: left; /* Đảm bảo chữ canh trái */
+    text-align: left;
     display: block;
     line-height: 1.3;
 }
@@ -380,36 +380,33 @@ select { width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,
 .config-actions-secondary .action-btn.danger { width: 100%; }
 
 /* ============================================
-   ⭐ BẢNG MÀU CHUẨN XẾP CHỒNG
+   ⭐ BẢNG MÀU ÉP DỌC HOÀN TOÀN TỪ TRÊN XUỐNG CỦA SẾP
    ============================================ */
 .color-swatch-row {
-    display: grid;
-    /* Dùng auto-fit để chia cột không bị ép nhỏ */
-    grid-template-columns: repeat(auto-fit, minmax(45px, 1fr)); 
-    gap: 15px 8px;
+    display: flex;
+    flex-direction: column; /* Ép dọc từ trên xuống dưới */
+    gap: 15px;              /* Khoảng cách giữa các cụm màu */
     margin-top: 15px;
-    align-items: end; /* Canh đáy cho tất cả nút màu đều thẳng hàng ngang */
+    align-items: flex-start; /* Dạt tất cả về bên trái */
+    width: 100%;
 }
 .color-swatch {
     display: flex;
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: flex-end; /* Đẩy nội dung xuống */
-    gap: 12px; /* Khoảng cách chuẩn giữa tiêu đề và nút màu */
+    flex-direction: column;
+    align-items: flex-start; /* Ép chữ và nút màu dạt trái */
+    gap: 8px;               /* Khoảng cách giữa chữ và nút màu */
     width: 100%;
 }
 .color-swatch .swatch-label {
-    font-size: 11px;
+    font-size: 14px;        /* Chỉnh to bằng tiêu đề thanh kéo */
     font-weight: 500;
     color: rgba(255,255,255,0.9);
-    text-align: center; /* Canh giữa chữ phía trên */
-    line-height: 1.3;
+    text-align: left;       /* Canh trái */
     display: block;
     width: 100%;
-    word-wrap: break-word; /* Tự rớt dòng nếu dài */
 }
 
-/* Đảm bảo TOÀN BỘ nút chọn màu đều 30x30, tròn xoe */
+/* Đảm bảo TOÀN BỘ nút chọn màu đều 30x30, tròn xoe và nằm bên trái */
 input[type="color"] {
     -webkit-appearance: none;
     appearance: none;
@@ -425,7 +422,7 @@ input[type="color"] {
     box-shadow: 0 2px 6px rgba(0,0,0,0.4);
     display: block;
     flex-shrink: 0;
-    margin: 0 auto;
+    margin: 0; /* Xóa margin canh giữa, để nó tựa lề trái */
 }
 input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 input[type="color"]::-webkit-color-swatch {
