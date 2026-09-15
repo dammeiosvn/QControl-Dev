@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-title" content="Control Panel">
     <link rel="apple-touch-icon" href="icon.png">
     <title>Trung tâm điều khiển - Sentechtipvn</title>
-    <link rel="stylesheet" href="CSS/style.css?v=21">
+    <link rel="stylesheet" href="CSS/style.css?v=22">
 </head>
 <body>
 
@@ -74,7 +74,7 @@
             <button class="settings-tab active" data-tab="tab-appearance" data-i18n="tab_appearance">🎨 Giao diện</button>
             <button class="settings-tab" data-tab="tab-title" data-i18n="tab_title">✏️ Tiêu đề</button>
             <button class="settings-tab" data-tab="tab-frame" data-i18n="tab_frame">🖼️ Khung</button>
-            <button class="settings-tab" data-tab="tab-media" data-i18n="tab_media">🎵 Media</button>
+            <button class="settings-tab" data-tab="tab-media" data-i18n="tab_media">🎵 Nhạc</button>
             <button class="settings-tab dev-only" data-tab="tab-shadow" data-i18n="tab_shadow">🌑 Bóng</button>
         </div>
 
@@ -114,13 +114,12 @@
 
                     <div class="feature-toggles">
                         <label><span data-i18n="lbl_audio_feedback">🎚️ Âm thanh</span><input type="checkbox" id="toggle-audio"></label>
-                        <label><span data-i18n="lbl_parallax">🧭 Gia tốc kế 3D</span><input type="checkbox" id="toggle-parallax"></label>
+                        <label><span data-i18n="lbl_parallax">🧭 Hiệu ứng 3D</span><input type="checkbox" id="toggle-parallax"></label>
                     </div>
                 </div>
 
-                <!-- Bảng màu danh sách -->
                 <div class="setting-group highlight-box">
-                    <label data-i18n="lbl_quick_palette">🎨 Bảng màu nhanh</label>
+                    <label data-i18n="lbl_quick_palette">🎨 Bảng màu danh sách</label>
                     <div class="color-swatch-row">
                         <div class="color-swatch">
                             <span class="swatch-label" data-i18n="swatch_bg_main_short">Nền</span>
@@ -167,10 +166,10 @@
 
                 <div class="setting-group highlight-box">
                     <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_list_bg_opacity">Đậm nhạt màu nền</span>
+                        <span class="slider-label" data-i18n="lbl_list_bg_opacity">Đậm nhạt</span>
                         <input type="range" id="val-list-bg-opacity" min="0" max="100" value="10">
                     </div>
-                    <label style="margin-top: 10px;"><input type="checkbox" id="toggle-list-frame"> <span data-i18n="lbl_list_frame">Theme cho Danh sách</span></label>
+                    <label style="margin-top: 10px;"><input type="checkbox" id="toggle-list-frame"> <span data-i18n="lbl_list_frame">Chủ đề danh sách</span></label>
                 </div>
 
                 <div class="setting-group" style="position: relative;">
@@ -191,16 +190,28 @@
             <div class="settings-tab-content" data-tab="tab-title">
                 <div class="setting-group highlight-box">
                     <label data-i18n="lbl_title_adjust">Sửa tiêu đề</label>
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_title_size">💫 Cỡ chữ chính</span><input type="range" id="val-title-size" min="14" max="40" value="22"></div>
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_title_spacing">📐 Dãn chữ chính</span><input type="range" id="val-title-spacing" min="0" max="10" step="0.5" value="0.5"></div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_title_size">🔠 Tên</span>
+                        <input type="range" id="val-title-size" min="14" max="40" value="22">
+                    </div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_title_spacing">📐 Khoảng cách</span>
+                        <input type="range" id="val-title-spacing" min="0" max="10" step="0.5" value="0.5">
+                    </div>
                     <hr style="border: 0; border-top: 1px solid rgba(150,150,150,0.2); margin: 10px 0;">
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_icon_size">💫 Cỡ chữ Icon</span><input type="range" id="val-icon-size" min="10" max="25" value="14"></div>
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_icon_spacing">📐 Dãn chữ Icon</span><input type="range" id="val-icon-spacing" min="0" max="5" step="0.1" value="0"></div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_icon_size">🔠 iCon</span>
+                        <input type="range" id="val-icon-size" min="10" max="25" value="14">
+                    </div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_icon_spacing">📐 Khoảng cách</span>
+                        <input type="range" id="val-icon-spacing" min="0" max="5" step="0.1" value="0">
+                    </div>
                     <label style="margin-top: 10px;"><input type="checkbox" id="toggle-hide-labels"> <span data-i18n="lbl_hide_labels">Ẩn tên</span></label>
                 </div>
             </div>
 
-            <!-- TAB 3: KHUNG (Đã chuẩn hoá nút chọn màu) -->
+            <!-- TAB 3: KHUNG -->
             <div class="settings-tab-content" data-tab="tab-frame">
                 <div class="setting-group highlight-box">
                     <label>🎨 Màu sắc Khung</label>
@@ -217,15 +228,30 @@
                 </div>
                 <div class="setting-group highlight-box">
                     <label data-i18n="lbl_frame_svg_size">🖼️ Khung Icon & SVG</label>
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_frame_size">Kích thước Khung</span><input type="range" id="val-frame-size" min="40" max="100" value="60"></div>
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_frame_radius">Bo góc</span><input type="range" id="val-frame-radius" min="0" max="50" value="22"></div>
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_svg_size">Kích thước SVG</span><input type="range" id="val-svg-size" min="16" max="60" value="28"></div>
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_svg_opacity">Độ đậm SVG</span><input type="range" id="val-svg-opacity" min="0" max="100" value="100"></div>
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_frame_bg_opacity">Độ đậm nền Khung</span><input type="range" id="val-frame-bg-opacity" min="0" max="100" value="100"></div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_frame_size">Khung</span>
+                        <input type="range" id="val-frame-size" min="40" max="100" value="60">
+                    </div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_frame_radius">Bo góc</span>
+                        <input type="range" id="val-frame-radius" min="0" max="50" value="22">
+                    </div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_svg_size">SVG</span>
+                        <input type="range" id="val-svg-size" min="16" max="60" value="28">
+                    </div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_svg_opacity">Độ đậm SVG</span>
+                        <input type="range" id="val-svg-opacity" min="0" max="100" value="100">
+                    </div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_frame_bg_opacity">Độ đậm nền</span>
+                        <input type="range" id="val-frame-bg-opacity" min="0" max="100" value="100">
+                    </div>
                 </div>
             </div>
 
-            <!-- TAB 4: MEDIA (Đã chuẩn hoá nút chọn màu) -->
+            <!-- TAB 4: MEDIA -->
             <div class="settings-tab-content" data-tab="tab-media">
                 <div class="setting-group highlight-box">
                     <label>🎨 Màu sắc Media</label>
@@ -250,14 +276,26 @@
                 </div>
                 
                 <div class="setting-group highlight-box">
-                    <label data-i18n="lbl_media_widget">🎵 Kích thước & Hiển thị</label>
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_media_width">Kích thước khung</span><input type="range" id="val-media-width" min="50" max="100" value="90"></div>
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_media_bg_opacity">Độ mờ khung</span><input type="range" id="val-media-bg-opacity" min="0" max="100" value="3"></div>
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_media_btn_size">Cỡ nút bấm</span><input type="range" id="val-media-btn-size" min="30" max="70" value="50"></div>
-                    <div class="slider-item"><span class="slider-label" data-i18n="lbl_thumb_size">Kích thước núm</span><input type="range" id="val-thumb-size" min="10" max="40" value="25"></div>
+                    <label data-i18n="lbl_media_widget">🎶 Trình Phát Nhạc</label>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_media_width">Kích thước khung</span>
+                        <input type="range" id="val-media-width" min="50" max="100" value="90">
+                    </div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_media_bg_opacity">Độ mờ khung</span>
+                        <input type="range" id="val-media-bg-opacity" min="0" max="100" value="3">
+                    </div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_media_btn_size">Cỡ nút bấm</span>
+                        <input type="range" id="val-media-btn-size" min="30" max="70" value="50">
+                    </div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_thumb_size">Kích thước núm</span>
+                        <input type="range" id="val-thumb-size" min="10" max="40" value="25">
+                    </div>
                     
                     <label style="margin-top: 10px; display: flex; align-items: center; gap: 5px;">
-                        <input type="checkbox" id="toggle-media-theme"> <span data-i18n="lbl_media_theme_sync">Đồng bộ Theme hệ thống</span>
+                        <input type="checkbox" id="toggle-media-theme"> <span data-i18n="lbl_media_theme_sync">Đồng bộ chủ đề hệ thống</span>
                     </label>
                     <label style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
                         <div style="display: flex; align-items: center; gap: 5px;">
@@ -422,7 +460,7 @@
         })();
     </script>
 
-    <script src="js/theme.js?v=21"></script>
-    <script src="js/main.js?v=21"></script>
+    <script src="js/theme.js?v=22"></script>
+    <script src="js/main.js?v=22"></script>
 </body>
 </html>
