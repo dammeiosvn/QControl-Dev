@@ -81,6 +81,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         const container = document.getElementById('control-panel');
         if (!container) return;
 
+        /* ============================================================
+           RENDER ICON TỪ DATA.JSON + KHÔI PHỤC THỨ TỰ ĐÃ LƯU
+           ============================================================ */
         let renderArray = data.buttons;
         const savedOrder = safeGetItem('sttv_iconOrder');
         if (savedOrder) {
@@ -101,7 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 btn.href = item.action || '#';
                 btn.dataset.id = item.id;
 
-                // ⭐ FIX: ưu tiên vi-VN, nếu không có thì thử en-US, cuối cùng là "Phím tắt"
+                // ⭐ FIX: ưu tiên i18n, fallback title gốc, cuối cùng là "Phím tắt"
                 const localizedTitle = window.i18nData[item.title_key]
                     || item.title
                     || 'Phím tắt';
@@ -111,26 +114,82 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
         }
 
+        /* ============================================================
+           ⭐ SORT MODE — Bản mới
+           - Bấm "Sắp xếp" → đóng popup cài đặt → bật edit mode
+           - Nút ✔️ hiện ra, xám khi chưa chọn, xanh khi có icon được chọn
+           - Chọn icon → phát sáng xanh + dấu ✓ trong khung tròn
+           - Bấm ✔️ → thoát, lưu thứ tự, ẩn nút
+           ============================================================ */
         const btnEditLayout = document.getElementById('btn-edit-layout');
+        const sortFab = document.getElementById('btn-confirm-sort');
         let editMode = false;
         let selectedSwapNode = null;
 
+        function blockNav(e) {
+            if (editMode) e.preventDefault();
+        }
+
+        function enterEditMode() {
+            if (editMode) return;
+            editMode = true;
+            document.body.classList.add('edit-mode');
+            if (sortFab) sortFab.classList.remove('hidden');
+
+            // Block click mở shortcut khi đang sắp xếp
+            container.querySelectorAll('.glass-btn').forEach(b => {
+                b.addEventListener('click', blockNav, true);
+            });
+        }
+
+        function exitEditMode() {
+            if (!editMode) return;
+            editMode = false;
+            document.body.classList.remove('edit-mode');
+
+            if (sortFab) {
+                sortFab.classList.add('hidden');
+                sortFab.classList.remove('active');
+            }
+
+            if (selectedSwapNode) {
+                selectedSwapNode.classList.remove('selected-swap');
+                selectedSwapNode = null;
+            }
+
+            // Gỡ listener block
+            container.querySelectorAll('.glass-btn').forEach(b => {
+                b.removeEventListener('click', blockNav, true);
+            });
+
+            // Lưu thứ tự mới
+            const newOrder = Array.from(container.querySelectorAll('.glass-btn')).map(b => b.dataset.id);
+            safeSetItem('sttv_iconOrder', JSON.stringify(newOrder));
+        }
+
         if (btnEditLayout) {
-            btnEditLayout.addEventListener('click', () => {
-                editMode = !editMode;
-                document.body.classList.toggle('edit-mode', editMode);
-                btnEditLayout.style.background = editMode ? 'red' : '';
+            btnEditLayout.addEventListener('click', (e) => {
+                e.preventDefault();
 
-                const editLabel = window.i18nData?.['btn_edit_layout'] || 'Sắp xếp';
-                btnEditLayout.innerHTML = editMode ? 'Xong' : `🔄 <span>${editLabel}</span>`;
-
-                if (!editMode && selectedSwapNode) {
-                    selectedSwapNode.classList.remove('selected-swap');
-                    selectedSwapNode = null;
+                // ⭐ Đóng popup cài đặt trước khi vào chế độ sắp xếp
+                if (typeof window.__closeSettings === 'function') {
+                    window.__closeSettings();
+                } else {
+                    const d = document.getElementById('settings-drawer');
+                    const o = document.getElementById('settings-overlay');
+                    if (d) d.classList.remove('open');
+                    if (o) o.classList.remove('open');
                 }
-                document.querySelectorAll('.glass-btn').forEach(b => {
-                    b.onclick = editMode ? (e) => e.preventDefault() : null;
-                });
+
+                // Delay nhỏ để drawer đóng mượt rồi mới bật edit mode
+                setTimeout(enterEditMode, 220);
+            });
+        }
+
+        if (sortFab) {
+            sortFab.addEventListener('click', (e) => {
+                e.preventDefault();
+                exitEditMode();
             });
         }
 
@@ -138,14 +197,20 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (!editMode) return;
             const target = e.target.closest('.glass-btn');
             if (!target) return;
+            e.preventDefault();
 
             if (!selectedSwapNode) {
+                // Chọn icon đầu tiên
                 selectedSwapNode = target;
                 target.classList.add('selected-swap');
+                if (sortFab) sortFab.classList.add('active');
             } else if (selectedSwapNode === target) {
+                // Bỏ chọn chính nó
                 target.classList.remove('selected-swap');
                 selectedSwapNode = null;
+                if (sortFab) sortFab.classList.remove('active');
             } else {
+                // Hoán đổi vị trí 2 icon
                 const temp = document.createElement('div');
                 target.parentNode.insertBefore(temp, target);
                 selectedSwapNode.parentNode.insertBefore(target, selectedSwapNode);
@@ -154,12 +219,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 selectedSwapNode.classList.remove('selected-swap');
                 selectedSwapNode = null;
-
-                const newOrder = Array.from(container.querySelectorAll('.glass-btn')).map(b => b.dataset.id);
-                safeSetItem('sttv_iconOrder', JSON.stringify(newOrder));
+                if (sortFab) sortFab.classList.remove('active');
+                // Chưa lưu — đợi user bấm ✔️ xác nhận
             }
         });
 
+        /* ============================================================
+           OBSERVER — cập nhật i18n cho icon render động
+           ============================================================ */
         const observer = new MutationObserver(() => {
             document.querySelectorAll('#control-panel [data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
