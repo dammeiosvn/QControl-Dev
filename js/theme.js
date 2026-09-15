@@ -125,7 +125,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let rafId = null;
         document.addEventListener('input', (e) => {
-            if (e.target && e.target.type === 'range') {
+            if (!e.target) return;
+
+            /* --- Range: hiện tooltip + update live --- */
+            if (e.target.type === 'range') {
                 const input = e.target;
                 if (rafId) cancelAnimationFrame(rafId);
                 rafId = requestAnimationFrame(() => {
@@ -142,10 +145,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     globalTooltip.style.top = `${rect.top - 35}px`;
                 });
                 try { playTick(); } catch(e) {}
-                if (e.target.id !== 'val-theme-preset' && e.target.id !== 'val-popup-anim') {
-                    resetPresetToCustom();
-                }
+                resetPresetToCustom();
                 updateLiveVariables(false); 
+            }
+
+            /* ⭐ Color: live update ngay khi kéo color picker */
+            else if (e.target.type === 'color') {
+                resetPresetToCustom();
+                updateLiveVariables(false);
             }
         });
 
@@ -155,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.addEventListener('pointerup', hideTooltip);
         document.addEventListener('touchend', hideTooltip);
         document.addEventListener('change', (e) => {
-            if (e.target && e.target.type === 'range') {
+            if (e.target && (e.target.type === 'range' || e.target.type === 'color')) {
                 hideTooltip(e);
                 saveSettingsToLocal();
             }
@@ -321,21 +328,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         function resetPresetToCustom() {
-            if (presetSelect) {
+            if (presetSelect && presetSelect.value !== 'none') {
                 presetSelect.value = 'none';
                 localStorage.setItem('sttv_activePreset', 'none');
             }
         }
 
+        /* ========== POPUP ANIMATION SELECT ========== */
         const popupAnimSelect = document.getElementById('val-popup-anim');
+        const KNOWN_ANIM_CLASSES = ['anim-zoom', 'anim-slide-top', 'anim-fade'];
         if (popupAnimSelect && drawerEl) {
             popupAnimSelect.addEventListener('change', (e) => {
                 const animClass = e.target.value;
-                drawerEl.className = 'settings-drawer ' + (drawerEl.classList.contains('open') ? 'open ' : '') + (animClass !== 'default' ? animClass : '');
-                localStorage.setItem('sttv_popupAnim', animClass);
+                // ⭐ Xoá tất cả class animation cũ, thêm class mới (không ghi đè className)
+                KNOWN_ANIM_CLASSES.forEach(c => drawerEl.classList.remove(c));
+                if (animClass !== 'default' && KNOWN_ANIM_CLASSES.includes(animClass)) {
+                    drawerEl.classList.add(animClass);
+                }
+                try { localStorage.setItem('sttv_popupAnim', animClass); } catch(err) {}
             });
         }
 
+        /* ========== AUDIO TICK ========== */
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
         function playTick() {
@@ -359,30 +373,27 @@ document.addEventListener("DOMContentLoaded", () => {
             if (e.target.tagName === 'BUTTON' || e.target.type === 'checkbox' || e.target.closest('.theme-chip') || e.target.closest('.theme-chip-more')) playTick(); 
         });
 
-        /* ========== COLOR PICKER ========== */
-        let colorPickerLock = false;
-
+        /* ========== DRAWER BEHAVIOUR ========== */
         if (drawerEl) {
-            drawerEl.addEventListener('focusin', (e) => {
-                if (e.target && e.target.type === 'color') colorPickerLock = true;
-            });
-            drawerEl.addEventListener('focusout', (e) => {
-                if (e.target && e.target.type === 'color') {
-                    setTimeout(() => { colorPickerLock = false; }, 400);
-                }
-            });
+            // Khi color picker đổi giá trị -> save
             drawerEl.addEventListener('change', (e) => {
                 if (e.target.type === 'color') {
                     updateLiveVariables(true);
-                    setTimeout(() => { colorPickerLock = false; }, 150);
                 } 
                 else if (e.target.type === 'checkbox') {
                     updateLiveVariables(true); 
                 }
             });
+
+            // Class "adjusting" khi kéo range (làm mờ popup để thấy icon phía sau)
+            let adjustTimeout;
             drawerEl.addEventListener('input', (e) => {
-                if (e.target && e.target.type === 'color') e.stopPropagation();
-            }, true);
+                if (e.target.tagName === 'INPUT' && e.target.type === 'range') {
+                    drawerEl.classList.add('adjusting'); 
+                    clearTimeout(adjustTimeout);
+                    adjustTimeout = setTimeout(() => drawerEl.classList.remove('adjusting'), 800);
+                }
+            });
         }
 
         document.querySelectorAll('.shadow-switch').forEach(switchBtn => {
@@ -397,6 +408,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
+        /* ========== PARALLAX ========== */
         function handleOrientation(e) {
             const tp = document.getElementById('toggle-parallax');
             if (!tp || !tp.checked) return;
@@ -470,23 +482,14 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        let adjustTimeout;
-        if (drawerEl) {
-            drawerEl.addEventListener('input', (e) => {
-                if (e.target.tagName === 'INPUT' && e.target.type === 'range') {
-                    drawerEl.classList.add('adjusting'); 
-                    clearTimeout(adjustTimeout);
-                    adjustTimeout = setTimeout(() => drawerEl.classList.remove('adjusting'), 800);
-                }
-            });
-        }
-
+        /* ========== LAYOUT MODE ========== */
         function setLayoutMode(mode) { localStorage.setItem('sttv_layoutMode', mode); updateLiveVariables(true); }
         const btnLayoutList = document.getElementById('btn-layout-list');
         const btnLayoutGrid = document.getElementById('btn-layout-grid');
         if (btnLayoutList) btnLayoutList.onclick = () => { setLayoutMode('list'); resetPresetToCustom(); }; 
         if (btnLayoutGrid) btnLayoutGrid.onclick = () => { setLayoutMode('grid'); resetPresetToCustom(); };
 
+        /* ========== COLOR UTILS ========== */
         function hexToRgba(hex, alpha) {
             let r = 0, g = 0, b = 0;
             if (!hex) return `rgba(0,0,0,${alpha / 100})`;
@@ -502,6 +505,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return `${r}, ${g}, ${b}`;
         }
 
+        /* ========== SHADOW BUILD ========== */
         function updateShadow() {
             const activeShadows = document.querySelectorAll('input[name="active_shadow"]:checked');
             let combinedShadow = '';
@@ -532,9 +536,11 @@ document.addEventListener("DOMContentLoaded", () => {
             root.style.setProperty('--btn-shadow', combinedShadow || 'none');
         }
 
+        /* ========== HELPERS ========== */
         function g(id) { const el = document.getElementById(id); return el ? el.value : ''; }
         function c(id) { const el = document.getElementById(id); return el ? el.checked : false; }
 
+        /* ========== SAVE / LOAD ========== */
         function saveSettingsToLocal() {
             try {
                 localStorage.setItem('sttv_bgMain', g('val-bg-main'));
@@ -587,6 +593,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } catch(e) { console.warn('save failed:', e); }
         }
 
+        /* ========== PACK / UNPACK CONFIG ========== */
         function packConfig() {
             const shadowArr = [];
             SHADOW_MODES.forEach(mode => {
@@ -649,8 +656,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 setV('val-frame-size', data[7]); setV('val-svg-size', data[8]); 
                 setV('val-svg-opacity', data[9]); setV('val-frame-radius', data[10]); 
                 setV('val-frame-color', data[11]); setV('val-svg-color', data[12]);
-                setC('toggle-hide-labels', data[13] === '1'); setV('val-title-size', data[14]);
-                setV('val-title-spacing', data[15]); setC('toggle-list-frame', data[16] === '1');
+                setC('toggle-hide-labels', data[13] === '1');[ setV('val-title-size', data[14]);
+                setV29('val-title-spacing', data[15]); setC('toggle]) {
+                   -list-frame', const data[16] === '1');
                 setV('val-icon-size', data[17]); setV('val-icon-spacing', data[18]);
                 setV('val-list-bg-opacity', data[19]); setV('val-frame-bg-opacity', data[20]);
                 setV('val-media-width', data[21]); setV('val-media-bg-opacity', data[22]);
@@ -664,8 +672,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (drw) drw.classList.remove('active'); 
                 });
 
-                if (data[29]) {
-                    const shadows = data[29].split('~');
+                if (data shadows = data[29].split('~');
                     shadows.forEach(sh => {
                         const p = sh.split('*');
                         if (p.length > 1) {
@@ -702,6 +709,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
+        /* ========== EXPORT / IMPORT ========== */
         const btnExport = document.getElementById('btn-export');
         if (btnExport) {
             btnExport.addEventListener('click', (e) => { 
@@ -727,13 +735,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         /* ============================================================
-           ⭐ RESET VỀ TRẠNG THÁI BAN ĐẦU (như lần đầu mở WebClip)
-           - Xóa tất cả key localStorage có prefix sttv_
-           - Xóa tất cả CSS variables đã set trên :root
-           - Reset class trên body / main container
-           - Đóng tất cả modal / drawer đang mở
-           - Xóa background image trực tiếp
-           - Reload trang sạch
+           RESET VỀ TRẠNG THÁI BAN ĐẦU
            ============================================================ */
         const btnResetDefault = document.getElementById('btn-reset-default');
         if (btnResetDefault) {
@@ -750,7 +752,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (!ok) return;
 
                 try {
-                    /* 1. Xóa toàn bộ key sttv_ trong localStorage */
                     const keysToRemove = [];
                     for (let i = 0; i < localStorage.length; i++) {
                         const key = localStorage.key(i);
@@ -758,7 +759,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                     keysToRemove.forEach(k => localStorage.removeItem(k));
 
-                    /* 2. Xóa toàn bộ CSS variables đã set trên :root */
                     const rootEl = document.documentElement;
                     const cssVarsToReset = [
                         '--bg-main', '--text-color', '--frame-size', '--svg-size',
@@ -775,7 +775,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     ];
                     cssVarsToReset.forEach(v => rootEl.style.removeProperty(v));
 
-                    /* 3. Xóa class trạng thái trên body / main container */
                     document.body.classList.remove(
                         'edit-mode', 'glass-active', 'standard-mode'
                     );
@@ -783,26 +782,26 @@ document.addEventListener("DOMContentLoaded", () => {
                         mainContainer.className = 'app-container grid-mode';
                     }
 
-                    /* 4. Đóng tất cả modal / drawer / overlay đang mở */
                     if (drawerEl) drawerEl.className = 'settings-drawer';
                     if (overlay) overlay.classList.remove('open');
                     if (themeModal) themeModal.classList.remove('show');
                     if (infoModal) infoModal.classList.remove('show');
                     if (themeOverlay) themeOverlay.classList.remove('show');
 
-                    /* 5. Xóa background image trực tiếp trên :root */
                     rootEl.style.setProperty('--bg-image', 'none');
                 } catch (err) {
                     console.warn('[Reset] Lỗi khi xóa:', err);
                 }
 
-                /* 6. Reload để load lại trạng thái mặc định */
                 setTimeout(() => {
                     location.reload();
                 }, 150);
             });
         }
 
+        /* ============================================================
+           UPDATE LIVE VARIABLES
+           ============================================================ */
         function updateLiveVariables(saveNow = false) {
             root.style.setProperty('--bg-main', g('val-bg-main'));
             root.style.setProperty('--text-color', g('val-text-color'));
@@ -882,7 +881,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const toggleThemeDot = document.getElementById('toggle-theme-dot');
             const btnThumbThemeEl = document.getElementById('btn-thumb-theme');
             const thumbColorEl = document.getElementById('val-thumb-color');
-            const thumbColorItem = thumbColorEl ? thumbColorEl.parentElement : null;
+            const thumbColorItem = thumbColorEl ? thumbColorEl.closest('.slider-item') : null;
             const mediaWidget = document.querySelector('.media-player-widget');
             
             if (mediaWidget) {
@@ -904,6 +903,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (saveNow) saveSettingsToLocal();
         }
 
+        /* ============================================================
+           LOAD FROM LOCAL STORAGE
+           ============================================================ */
         function loadSettingsFromLocal() {
             const safeSet = (id, key, fallback, isCheck = false) => {
                 const el = document.getElementById(id); 
@@ -926,7 +928,9 @@ document.addEventListener("DOMContentLoaded", () => {
             
             const savedAnim = localStorage.getItem('sttv_popupAnim') || 'default';
             if (popupAnimSelect) popupAnimSelect.value = savedAnim;
-            if (savedAnim !== 'default' && drawerEl) drawerEl.classList.add(savedAnim);
+            if (savedAnim !== 'default' && drawerEl && KNOWN_ANIM_CLASSES.includes(savedAnim)) {
+                drawerEl.classList.add(savedAnim);
+            }
 
             safeSet('val-frame-size', 'frameSize', '60'); 
             safeSet('val-svg-size', 'svgSize', '28'); 
