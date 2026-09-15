@@ -7,7 +7,7 @@ const SHADOW_MODES = [
     { id: 'inset', nameKey: 'shadow_inset', name: 'Bóng Chìm',     template: 'inset {x}px {y}px {b}px {s}px {c}' },
     { id: 'outer', nameKey: 'shadow_outer', name: 'Bóng Ngoài',    template: '{x}px {y}px {b}px {s}px {c}' },
     { id: 'soft',  nameKey: 'shadow_soft',  name: 'Mờ Diện Rộng',  template: '{x}px {y}px {b}px {s}px {c}' },
-    { id: 'hard',  nameKey: 'shadow_hard',  name: 'Nổi Khối 3D',   template: '{x}px {y}px {b}px {s}px {c}' },
+    { id: 'hard',  nameKey: 'shadow_hard',  name: 'Nổi Khối 3D',   template: '{x}px {y}px 0px {s}px {c}' },
     { id: 'glow',  nameKey: 'shadow_glow',  name: 'Phát Sáng',     template: '0px 0px {b}px {s}px {c}' },
     { id: 'bottom',    nameKey: 'shadow_bottom',    name: 'Bóng Dưới (Apple)', template: '0px {y}px {b}px {s}px {c}' },
     { id: 'floating',  nameKey: 'shadow_floating',  name: 'Nổi Bay',            template: '0px {b}px {b}px calc(-1 * {s}px) {c}' },
@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        /* KIẾN TRÚC LẠI PHẦN ĐỔ BÓNG (SHADOW) THEO CHUẨN HTML MỚI */
+        /* Cập nhật HTML cho Đổ Bóng (Shadow) khớp với style xếp chồng */
         try {
             const shadowContainer = document.getElementById('shadow-controls');
             if (shadowContainer) {
@@ -169,11 +169,26 @@ document.addEventListener("DOMContentLoaded", () => {
                             <input type="checkbox" name="active_shadow" value="${mode.id}" class="shadow-switch">
                         </div>
                         <div class="shadow-drawer" id="drawer-${mode.id}">
-                            <div class="slider-item"><span class="slider-label" data-i18n="slider_x">Trục X</span><input type="range" class="s-x" min="-20" max="20" value="0"></div>
-                            <div class="slider-item"><span class="slider-label" data-i18n="slider_y">Trục Y</span><input type="range" class="s-y" min="-20" max="20" value="4"></div>
-                            <div class="slider-item"><span class="slider-label" data-i18n="slider_blur">Độ mờ</span><input type="range" class="s-b" min="0" max="50" value="10"></div>
-                            <div class="slider-item"><span class="slider-label" data-i18n="slider_spread">Lan rộng</span><input type="range" class="s-s" min="-10" max="30" value="0"></div>
-                            <div class="slider-item"><span class="slider-label" data-i18n="slider_opacity">Độ đậm bóng</span><input type="range" class="s-o" min="0" max="100" value="100"></div>
+                            <div class="slider-item">
+                                <span class="slider-label" data-i18n="slider_x">Trục X</span>
+                                <input type="range" class="s-x" min="-20" max="20" value="0">
+                            </div>
+                            <div class="slider-item">
+                                <span class="slider-label" data-i18n="slider_y">Trục Y</span>
+                                <input type="range" class="s-y" min="-20" max="20" value="4">
+                            </div>
+                            <div class="slider-item">
+                                <span class="slider-label" data-i18n="slider_blur">Độ mờ</span>
+                                <input type="range" class="s-b" min="0" max="50" value="10">
+                            </div>
+                            <div class="slider-item">
+                                <span class="slider-label" data-i18n="slider_spread">Lan rộng</span>
+                                <input type="range" class="s-s" min="-10" max="30" value="0">
+                            </div>
+                            <div class="slider-item">
+                                <span class="slider-label" data-i18n="slider_opacity">Độ đậm bóng</span>
+                                <input type="range" class="s-o" min="0" max="100" value="100">
+                            </div>
                             <div class="color-swatch-row" style="grid-template-columns: 1fr; margin-top: 5px;">
                                 <div class="color-swatch">
                                     <span class="swatch-label" data-i18n="slider_color">Màu Bóng</span>
