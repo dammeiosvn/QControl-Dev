@@ -61,33 +61,32 @@ body.standard-mode .dev-only { display: none !important; }
 .app-container.intro-zoom { transform: scale(0.9); opacity: 0; }
 
 /* ============================================
-   SLIDER ITEM
+   ⭐ SLIDER ITEM — CHUẨN XẾP CHỒNG
    ============================================ */
 .slider-item { 
-    position: relative; 
     display: flex; 
     flex-direction: column;         
-    align-items: stretch; 
-    gap: 8px;
-    margin-bottom: 16px; 
+    align-items: flex-start; /* Ép tiêu đề nằm sát lề trái */
+    justify-content: center;
+    gap: 12px; /* Khoảng cách chuẩn giữa tiêu đề và thanh trượt */
+    margin-bottom: 20px; 
     width: 100%; 
-    transition: opacity 0.3s ease; 
-}
-.slider-item input[type=range] { 
-    width: 100% !important; 
-    flex: none;
+    position: relative;
 }
 .slider-label { 
     width: 100%; 
-    font-size: 12.5px; 
-    font-weight: 600;
-    color: rgba(255,255,255,0.85);
+    font-size: 14px; 
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
     white-space: normal;            
-    overflow: visible;
-    text-overflow: clip;
-    padding-right: 0;
+    text-align: left; /* Đảm bảo chữ canh trái */
+    display: block;
     line-height: 1.3;
-    letter-spacing: 0.2px;
+}
+.slider-item input[type=range] { 
+    width: 100% !important; 
+    margin: 0 !important;
+    flex: none;
 }
 .slider-tooltip { position: fixed; background: #007aff; color: #ffffff; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 8px; opacity: 0; transform: translateX(-50%) translateY(5px); transition: opacity 0.15s ease, transform 0.15s ease; pointer-events: none; z-index: 999999; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 .slider-tooltip.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -211,17 +210,15 @@ input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; bac
 .settings-fab img { width: 100%; height: 100%; object-fit: contain; }
 .settings-fab:active { transform: scale(0.9); }
 
-/* NÚT XÁC NHẬN SẮP XẾP MỚI */
 .sort-fab { 
     position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%) scale(1); 
     width: 56px; height: 56px; border-radius: 50%; border: none; 
-    background: #8e8e93; /* Mặc định nghỉ màu xám */
+    background: #8e8e93; 
     color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 1000; 
     cursor: pointer; display: flex; align-items: center; justify-content: center; 
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
 }
 .sort-fab.hidden { transform: translateX(-50%) scale(0) !important; opacity: 0; pointer-events: none; }
-/* Phát sáng xanh dương khi có icon đang được chọn (has-selection) */
 body.has-selection .sort-fab { 
     background: #007aff; 
     box-shadow: 0 0 20px rgba(0, 122, 255, 0.8); 
@@ -236,7 +233,6 @@ body.has-selection .sort-fab {
 .settings-drawer .theme-grid-picker { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 10px; justify-items: center; align-items: center; overflow: hidden; }
 .macos-window .full-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-height: 280px; overflow-y: auto; padding: 5px; justify-items: center; align-items: center; }
 
-/* Thumbnail 30x30 đồng bộ */
 .theme-chip { 
     width: 30px; height: 30px; max-width: 30px; aspect-ratio: 1; border-radius: 50%; 
     background: transparent; border: 2px solid transparent; display: flex; 
@@ -299,7 +295,7 @@ body.has-selection .sort-fab {
 }
 
 /* ============================================
-   TAB BAR — CHỈ GIỮ LẠI MÀU XANH DƯƠNG (Không phát sáng)
+   TAB BAR
    ============================================ */
 .settings-tabs-bar {
     display: flex; gap: 4px; padding: 10px 12px;
@@ -314,22 +310,19 @@ body.has-selection .sort-fab {
     padding: 9px 6px; border: none;
     background: rgba(255,255,255,0.06);
     color: rgba(255,255,255,0.6);
-    border-radius: 50px; /* Bo tròn viên thuốc */
-    font-size: 9px; /* Giảm 2px */
+    border-radius: 50px; 
+    font-size: 9px; 
     font-weight: 600;
     cursor: pointer; transition: all 0.25s ease;
     white-space: nowrap; font-family: -apple-system, sans-serif;
     -webkit-tap-highlight-color: transparent; text-align: center;
 }
 .settings-tab:active { transform: scale(0.96); }
-
-/* TAB ĐƯỢC CHỌN: Chỉ giữ xanh dương, chữ trắng, bỏ hiệu ứng phát sáng */
 .settings-tab.active {
     background: #007aff; 
     color: #ffffff;
     font-weight: 800;
 }
-
 .settings-tab-content { display: none; }
 .settings-tab-content.active { display: block; animation: tabFadeIn 0.25s ease-out; }
 @keyframes tabFadeIn {
@@ -346,31 +339,6 @@ body.has-selection .sort-fab {
 .feature-toggles { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; font-size: 13px; }
 .feature-toggles label { display: flex; justify-content: space-between; align-items: center; }
 .section-title { margin: 20px 0 10px; font-size: 16px; color: var(--accent-color); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
-
-/* ĐỒNG BỘ NÚT CHỌN MÀU TOÀN DIỆN 30x30 */
-input[type="color"],
-.slider-item input[type="color"], 
-.setting-group input[type="color"],
-.color-swatch input[type=color] { 
-    -webkit-appearance: none;
-    appearance: none;
-    width: 30px !important; 
-    height: 30px !important; 
-    padding: 0; 
-    border: none; 
-    background: transparent; 
-    border-radius: 50% !important; 
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    margin: 0 auto;
-    display: block;
-}
-input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-input[type="color"]::-webkit-color-swatch {
-    border: 2px solid rgba(255,255,255,0.3);
-    border-radius: 50%;
-}
-input[type="color"]:active { transform: scale(0.92); border-color: #007aff; }
 
 .layout-buttons { display: flex; gap: 10px; }
 .layout-btn { flex: 1; padding: 10px 0; background: rgba(255,255,255,0.1); border: 1px solid transparent; color: white; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
@@ -412,40 +380,60 @@ select { width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,
 .config-actions-secondary .action-btn.danger { width: 100%; }
 
 /* ============================================
-   BẢNG MÀU NHANH
+   ⭐ BẢNG MÀU CHUẨN XẾP CHỒNG
    ============================================ */
 .color-swatch-row {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    margin-top: 14px;
-    padding: 4px 0;
+    /* Dùng auto-fit để chia cột không bị ép nhỏ */
+    grid-template-columns: repeat(auto-fit, minmax(45px, 1fr)); 
+    gap: 15px 8px;
+    margin-top: 15px;
+    align-items: end; /* Canh đáy cho tất cả nút màu đều thẳng hàng ngang */
 }
 .color-swatch {
     display: flex;
-    flex-direction: column; /* Bố cục dọc */
-    align-items: center;
-    gap: 8px;
-    position: relative;
-    min-width: 0;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: flex-end; /* Đẩy nội dung xuống */
+    gap: 12px; /* Khoảng cách chuẩn giữa tiêu đề và nút màu */
+    width: 100%;
 }
-/* Tiêu đề nằm trên */
 .color-swatch .swatch-label {
-    order: -1; /* Lên trên */
-    font-size: 10.5px;
-    font-weight: 600;
-    color: rgba(255,255,255,0.8);
-    letter-spacing: 0.2px;
-    white-space: normal; /* Tiêu đề đầy đủ, cho phép xuống dòng */
-    text-align: center;
-    line-height: 1.25;
-    min-height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 2px;
-    word-break: break-word;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+    text-align: center; /* Canh giữa chữ phía trên */
+    line-height: 1.3;
+    display: block;
+    width: 100%;
+    word-wrap: break-word; /* Tự rớt dòng nếu dài */
 }
+
+/* Đảm bảo TOÀN BỘ nút chọn màu đều 30x30, tròn xoe */
+input[type="color"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    padding: 0;
+    border: none;
+    background: transparent;
+    border-radius: 50% !important;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    display: block;
+    flex-shrink: 0;
+    margin: 0 auto;
+}
+input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+input[type="color"]::-webkit-color-swatch {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    padding: 0;
+}
+input[type="color"]:active { transform: scale(0.92); border-color: #007aff; }
 
 /* ============================================
    CUSTOM FILE INPUT
@@ -583,14 +571,9 @@ select { width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,
 
 /* ============================================
    HỆ THỐNG GIAO DIỆN TỰ ĐỘNG SÁNG/TỐI (THEO HỆ THỐNG)
-   Cho thanh Popup Cài đặt và Thông tin
    ============================================ */
 @media (prefers-color-scheme: light) {
-    /* Đổi Cài đặt sang sáng */
-    .settings-drawer {
-        background: rgba(255, 255, 255, 0.95);
-        color: #000000;
-    }
+    .settings-drawer { background: rgba(255, 255, 255, 0.95); color: #000000; }
     .settings-header { border-bottom: 1px solid rgba(0,0,0,0.1); }
     .settings-header .header-btn { background: rgba(0,0,0,0.08); color: #000; }
     .settings-tab { color: rgba(0,0,0,0.6); background: rgba(0,0,0,0.05); }
@@ -606,24 +589,15 @@ select { width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,
     .shadow-item { border-color: rgba(0,0,0,0.1); }
     input[type="color"]::-webkit-color-swatch { border: 2px solid rgba(0,0,0,0.2); }
     .file-input-name { color: #555; }
-    
-    /* Đảm bảo Popup Thông tin chuẩn màu sáng */
     .macos-window { background: #ffffff; color: #000000; }
     .macos-header { background: #f1f1f1; }
 }
 
 @media (prefers-color-scheme: dark) {
-    /* Đổi Popup Thông tin và Cửa sổ sang tối */
-    .macos-window {
-        background: #1e1e1e;
-        color: #ffffff;
-    }
+    .macos-window { background: #1e1e1e; color: #ffffff; }
     .macos-header { background: #2d2d2d; }
     .macos-header div:last-child { color: #eeeeee !important; }
-    
     .info-version-value { color: #ffffff; background: rgba(255,255,255,0.1); }
     .info-desc-box p, .info-guide-box p { color: #dddddd; }
     .info-desc-box, .info-guide-box { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
-    
-    /* Mặc định của Drawer (như thiết kế cũ) đã là màu tối */
 }
