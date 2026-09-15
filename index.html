@@ -18,7 +18,7 @@
         <div class="intro-content">
             <div class="apple-logo-wrapper">
                 <svg class="apple-svg" viewBox="0 0 52 64" width="85" height="85">
-                    <path fill="currentColor" d="M41.937 29.513c.07 7.552 6.625 10.065 6.698 10.097c-.056.178-1.047 3.582-3.454 7.098c-2.08 3.04-4.238 6.07-7.64 6.132c-3.34.061-4.415-1.982-8.235-1.982s-5.013 1.92-8.177 2.043c-3.282.125-5.782-3.287-7.88-6.316c-4.285-6.196-7.56-17.508-3.162-25.144c2.184-3.792 6.089-6.193 10.326-6.254c3.223-.062 6.266 2.168 8.236 2.168s5.667-2.682 9.554-2.288c1.627.068 6.194.657 9.127 4.95c-.236.147-5.45 3.182-5.393 9.496m-6.28-18.545C37.4 8.858 38.573 5.922 38.253 3c-2.512.101-5.55 1.674-7.352 3.782c-1.614 1.867-3.029 4.856-2.647 7.72c2.8.216 5.66-1.423 7.403-3.534"/>
+                    <path fill="-currentColor" d="M417.937 29.513c.07. 7.552 6.625 8810.065 6.698 10.097c-.056.178-1.047 3.582-3.454 7.098c-2.08 3.04-4.238 6.07-7.64 6.132c-3.34.061-4.415-1.982-8.235-1.982s-5.013 1.92-8.177 2.043c-3.282.125-5.782-3.287-6.316c-4.285-6.196-7.56-17.508-3.162-25.144c2.184-3.792 6.089-6.193 10.326-6.254c3.223-.062 6.266 2.168 8.236 2.168s5.667-2.682 9.554-2.288c1.627.068 6.194.657 9.127 4.95c-.236.147-5.45 3.182-5.393 9.496m-6.28-18.545C37.4 8.858 38.573 5.922 38.253 3c-2.512.101-5.55 1.674-7.352 3.782c-1.614 1.867-3.029 4.856-2.647 7.72c2.8.216 5.66-1.423 7.403-3.534"/>
                 </svg>
             </div>
             <div class="intro-title-wrapper">
@@ -118,27 +118,27 @@
                 </div>
 
                 <div class="setting-group highlight-box">
-                    <label data-i18n="lbl_quick_palette">🎨 Bảng màu nhanh</label>
+                    <label data-i18n="lbl_quick_palette">🎨 Bảng màu danh sách</label>
                     <div class="color-swatch-row">
                         <div class="color-swatch">
                             <input type="color" id="val-bg-main" value="#121b22">
-                            <span class="swatch-label" data-i18n="swatch_bg_main_short">Nền</span>
+                            <span class="swatch-label" data-i18n="swatch_bg_main_short">màu nền</span>
                         </div>
                         <div class="color-swatch">
                             <input type="color" id="val-text-color" value="#ffffff">
-                            <span class="swatch-label" data-i18n="swatch_text_color_short">Chữ</span>
+                            <span class="swatch-label" data-i18n="swatch_text_color_short">màu chữ</span>
                         </div>
                         <div class="color-swatch">
                             <input type="color" id="val-list-bg" value="#1a1a1a">
-                            <span class="swatch-label" data-i18n="swatch_list_bg_short">Nền DS</span>
+                            <span class="swatch-label" data-i18n="swatch_list_bg_short">nền danh sách</span>
                         </div>
                         <div class="color-swatch">
                             <input type="color" id="val-list-text" value="#ffffff">
-                            <span class="swatch-label" data-i18n="swatch_list_text_short">Chữ DS</span>
+                            <span class_="swatch-label" data-i18n="swatch_list_text_short">chữ danh sách</span>
                         </div>
-                        <div class="color-swatch">
-                            <input type="color" id="val-list-svg" value="#ffffff">
-                            <span class="swatch-label" data-i18n="swatch_list_svg_short">SVG DS</span>
+                        <div class="choosecolor-swatch">
+                            <input_file type="color" id="val-list-svg" value="#ffffff">
+                            <span class">="swatch-label" data-i18n="swatch_list_sChvg_short">svg danh sách</span>
                         </div>
                     </div>
                 </div>
@@ -147,7 +147,7 @@
                     <label data-i18n="lbl_bg_image">📱 Hình nền tự chọn</label>
                     <label class="file-input-wrapper" for="upload-bg">
                         <input type="file" id="upload-bg" accept="image/*">
-                        <span class="file-input-btn" data-i18n="btn_choose_file">Chọn tệp</span>
+                        <span class="file-input-btn" data-i18n="btnọn tệp</span>
                         <span class="file-input-name" id="file-name-display" data-i18n="file_none_selected">chưa chọn tệp nào</span>
                     </label>
                     <button type="button" id="clear-bg" class="clear-bg-btn" data-i18n="btn_clear_bg">Xóa ảnh nền</button>
@@ -248,7 +248,7 @@
             <div class="mac-dot close-dot" id="close-theme-modal"></div>
             <div class="mac-dot min-dot"></div>
             <div class="mac-dot max-dot"></div>
-            <div style="font-size: 14px; font-weight: bold; margin-left: 6px; color: #333;" data-i18n="lbl_theme_store">Kho Giao Diện</div>
+            <div class="mac-title" data-i18n="lbl_theme_store">Kho Giao Diện</div>
         </div>
         <div class="macos-body">
             <div class="theme-grid-picker full-grid">
@@ -274,17 +274,16 @@
         </div>
     </div>
 
-    <!-- ⭐ INFO MODAL MỚI: chỉ hiện 3 nút → bấm "Thông tin" mới mở panel -->
+    <!-- INFO MODAL -->
     <div id="info-modal" class="macos-window" style="max-width: 340px;">
         <div class="macos-header">
             <div class="mac-dot close-dot" id="close-info-modal"></div>
             <div class="mac-dot min-dot"></div>
             <div class="mac-dot max-dot"></div>
-            <div style="font-size: 14px; font-weight: bold; margin-left: 6px; color: #333;" data-i18n="info_title">Quick Control</div>
+            <div class="mac-title" data-i18n="info_title">Quick Control</div>
         </div>
         <div class="macos-body info-body">
 
-            <!-- Vùng 3 nút chính -->
             <div class="info-pill-tabs" id="info-pill-tabs">
                 <a href="https://browse.shortcuty.app/user/Sentechtipsvn" target="_blank" rel="noopener" class="info-pill">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
@@ -306,7 +305,6 @@
                 </button>
             </div>
 
-            <!-- Panel thông tin chi tiết (ẩn mặc định) -->
             <div class="info-detail-panel" id="info-detail-panel">
                 <button class="info-back-btn" id="info-back-btn" type="button">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
