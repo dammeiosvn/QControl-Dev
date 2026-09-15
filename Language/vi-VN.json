@@ -22,19 +22,17 @@
   "opt_preset_Dark_Neon": "neon tối",
   "opt_preset_Green_glass": "thuỷ tinh xanh",
   "opt_preset_Gold_and_copper": "vàng đồng",
-
-  "lbl_quick_palette": "🎨 Bảng màu danh ch sách",
-  "swatch_bg_main": "mữàu nền chính dan",
-  "swatch_bgh_main_short": "màu n sền",
+  "lbl_quick_palette": "🎨 Bảng màu danh sách",
+  "swatch_bg_main": "màu nền chính",
+  "swatch_bg_main_short": "màu nền",
   "swatch_text_color": "màu chữ hệ thống",
   "swatch_text_color_short": "màu chữ",
   "swatch_list_bg": "màu nền danh sách",
   "swatch_list_bg_short": "nền danh sách",
-  "swatch_list_text": "màu",
+  "swatch_list_text": "màu chữ danh sách",
   "swatch_list_text_short": "chữ danh sách",
   "swatch_list_svg": "màu svg danh sách",
   "swatch_list_svg_short": "svg danh sách",
-
   "lbl_title_adjust": "Sửa tiêu đề",
   "lbl_title_size": "🔠 Tên",
   "lbl_title_spacing": "📐 Khoảng cách",
@@ -50,7 +48,6 @@
   "file_none_selected": "chưa chọn tệp nào",
   "file_selected_prefix": "Đã chọn: ",
   "lbl_glassmorphism": "Bật Kính mờ",
-
   "info_title": "Quick Control",
   "info_dev_prefix": "Phát triển bởi",
   "info_desc": "Webclip điều khiển đa năng, tích hợp giao diện kính mờ và hệ thống Live Knobs tuỳ biến sống động chuyên nghiệp dành riêng cho iOS.",
@@ -64,7 +61,6 @@
   "info_desc_title": "📝 Mô tả chức năng",
   "info_guide_title": "📖 Hướng dẫn sử dụng",
   "info_guide_desc": "1. Bấm vào nút bất kỳ để kích hoạt tính năng tương ứng (Wi-Fi, Bluetooth, VPN, Đèn pin...).\n\n2. Nhấn vào biểu tượng ⚙️ ở góc dưới phải để mở bảng Cài đặt tuỳ chỉnh.\n\n3. Chọn Theme có sẵn trong preset hoặc tự do kéo slider để tùy chỉnh màu sắc, kích thước khung, đổ bóng, kính mờ theo gu của bạn.\n\n4. Vào mục Giao diện → Xuất để lưu mã cấu hình, Nhập để khôi phục lại khi cần. Nên sao lưu mã trước khi xóa webclip.\n\n5. Slider âm lượng & độ sáng cần cài Shortcut tên \"QuickControl\" trong app Shortcuts để hoạt động.",
-
   "lbl_bg_main": "🏳️‍🌈 Màu Nền Chính",
   "lbl_text_color": "🏳️‍🌈 Màu Chữ Hệ Thống",
   "lbl_list_bg": "🏳️‍🌈 Màu nền Danh sách",
@@ -85,7 +81,6 @@
   "opt_anim_fade": "Làm mờ",
   "lbl_theme_store": "Kho Giao Diện",
   "lbl_svg_color": "🏳️‍🌈 Màu SVG",
-
   "lbl_shadow_section": "🔘 ĐỔ BÓNG",
   "shadow_inset": "⚪️ Bóng Chìm",
   "shadow_outer": "⚪️ Bóng Ngoài",
@@ -110,11 +105,9 @@
   "slider_spread": "Lan rộng",
   "slider_color": "Màu Bóng",
   "slider_opacity": "Độ đậm bóng",
-
   "lbl_layout_mode": "💠 Danh sách/Lưới",
   "msg_copy_success": "📄 Đã sao chép mã cấu hình!",
   "msg_prompt_import": "📥 Dán mã cấu hình vào đây:",
-
   "lbl_media_widget": "🎶 Trình Phát Nhạc",
   "lbl_media_width": "📐 Kích thước khung",
   "lbl_media_bg_opacity": "Độ mờ khung",
@@ -126,7 +119,6 @@
   "lbl_theme_dot": "💠 Chủ đề núm kéo",
   "lbl_thumb_size": "📐 Kích thước núm",
   "lbl_thumb_color": "🏳️‍🌈 Màu núm kéo",
-
   "lang_wifi": "Wi-Fi",
   "lang_bluetooth": "Bluetooth",
   "lang_cellular": "Di động",
