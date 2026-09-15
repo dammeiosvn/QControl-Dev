@@ -1,13 +1,13 @@
 const DEV_MODE = true; 
 
-const PRESET_VERSION = 6;
+const PRESET_VERSION = 1;
 const THEME_VERSION = 1;
 
 const SHADOW_MODES = [
     { id: 'inset', nameKey: 'shadow_inset', name: 'Bóng Chìm',     template: 'inset {x}px {y}px {b}px {s}px {c}' },
     { id: 'outer', nameKey: 'shadow_outer', name: 'Bóng Ngoài',    template: '{x}px {y}px {b}px {s}px {c}' },
     { id: 'soft',  nameKey: 'shadow_soft',  name: 'Mờ Diện Rộng',  template: '{x}px {y}px {b}px {s}px {c}' },
-    { id: 'hard',  nameKey: 'shadow_hard',  name: 'Nổi Khối 3D',   template: '{x}px {y}px {b}px {s}px {c}' },
+    { id: 'hard',  nameKey: 'shadow_hard',  name: 'Nổi Khối 3D',   template: '{x}px {y}px 0px {s}px {c}' },
     { id: 'glow',  nameKey: 'shadow_glow',  name: 'Phát Sáng',     template: '0px 0px {b}px {s}px {c}' },
     { id: 'bottom',    nameKey: 'shadow_bottom',    name: 'Bóng Dưới (Apple)', template: '0px {y}px {b}px {s}px {c}' },
     { id: 'floating',  nameKey: 'shadow_floating',  name: 'Nổi Bay',            template: '0px {b}px {b}px calc(-1 * {s}px) {c}' },
@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (themeOverlay) themeOverlay.classList.remove('show'); 
         };
 
-        /* ========== ⭐ INFO MODAL — 3 NÚT PILL + PANEL CHI TIẾT ========== */
+        /* ========== INFO MODAL — 3 NÚT PILL + PANEL CHI TIẾT ========== */
         const infoModal = document.getElementById('info-modal');
         const btnInfo = document.getElementById('btn-info');
         const infoPillTabs = document.getElementById('info-pill-tabs');
@@ -262,7 +262,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (infoDetailPanel) infoDetailPanel.classList.remove('active');
         }
 
-        // Mở modal Info từ nút (i) ở header
         if (btnInfo && infoModal) {
             btnInfo.onclick = () => { 
                 resetInfoModalView();
@@ -271,7 +270,6 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         }
 
-        // Bấm nút "Thông tin" → ẩn 3 pill, hiện panel chi tiết
         if (btnShowInfo) {
             btnShowInfo.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -280,7 +278,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Bấm nút "← Quay lại" → ẩn panel chi tiết, hiện lại 3 pill
         if (infoBackBtn) {
             infoBackBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -289,7 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Đóng modal Info
         const closeInfoModal = document.getElementById('close-info-modal');
         if (closeInfoModal && infoModal) {
             closeInfoModal.onclick = () => { 
@@ -299,7 +295,6 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         }
 
-        // Click overlay để đóng tất cả modal
         if (themeOverlay) {
             themeOverlay.onclick = () => { 
                 if (themeModal) themeModal.classList.remove('show'); 
@@ -731,21 +726,80 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
+        /* ============================================================
+           ⭐ RESET VỀ TRẠNG THÁI BAN ĐẦU (như lần đầu mở WebClip)
+           - Xóa tất cả key localStorage có prefix sttv_
+           - Xóa tất cả CSS variables đã set trên :root
+           - Reset class trên body / main container
+           - Đóng tất cả modal / drawer đang mở
+           - Xóa background image trực tiếp
+           - Reload trang sạch
+           ============================================================ */
         const btnResetDefault = document.getElementById('btn-reset-default');
         if (btnResetDefault) {
             btnResetDefault.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (confirm('⚠️ Khôi phục tất cả cài đặt về mặc định?\n\nThao tác này sẽ xóa toàn bộ tuỳ chỉnh, hình nền, theme hiện tại và KHÔNG THỂ hoàn tác.\n\nBạn có chắc chắn?')) {
-                    try {
-                        const keysToRemove = [];
-                        for (let i = 0; i < localStorage.length; i++) {
-                            const key = localStorage.key(i);
-                            if (key && key.startsWith('sttv_')) keysToRemove.push(key);
-                        }
-                        keysToRemove.forEach(k => localStorage.removeItem(k));
-                    } catch(err) { console.warn(err); }
-                    location.reload();
+                const ok = confirm(
+                    '⚠️ KHÔI PHỤC MẶC ĐỊNH\n\n' +
+                    '• Xóa toàn bộ tuỳ chỉnh (màu sắc, kích thước, theme)\n' +
+                    '• Xóa hình nền tự chọn\n' +
+                    '• Xóa theme đang dùng và hiệu ứng đang bật\n' +
+                    '• Đưa WebClip về trạng thái ban đầu khi mở lần đầu\n\n' +
+                    'Thao tác này KHÔNG THỂ hoàn tác. Bạn chắc chắn?'
+                );
+                if (!ok) return;
+
+                try {
+                    /* 1. Xóa toàn bộ key sttv_ trong localStorage */
+                    const keysToRemove = [];
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key && key.startsWith('sttv_')) keysToRemove.push(key);
+                    }
+                    keysToRemove.forEach(k => localStorage.removeItem(k));
+
+                    /* 2. Xóa toàn bộ CSS variables đã set trên :root */
+                    const rootEl = document.documentElement;
+                    const cssVarsToReset = [
+                        '--bg-main', '--text-color', '--frame-size', '--svg-size',
+                        '--svg-color', '--svg-opacity', '--frame-border-radius',
+                        '--list-border-radius', '--title-size', '--title-spacing',
+                        '--icon-font-size', '--icon-spacing', '--label-display',
+                        '--list-bg-color', '--list-bg-rgba', '--list-text-color',
+                        '--list-svg-color', '--frame-bg', '--frame-bg-color',
+                        '--btn-shadow', '--media-bg-rgb', '--media-bg-opacity',
+                        '--media-width', '--media-btn-color', '--media-svg-color',
+                        '--media-btn-size', '--media-btn-play', '--thumb-size',
+                        '--thumb-color', '--thumb-bg-image', '--bg-image',
+                        '--tilt-x', '--tilt-y'
+                    ];
+                    cssVarsToReset.forEach(v => rootEl.style.removeProperty(v));
+
+                    /* 3. Xóa class trạng thái trên body / main container */
+                    document.body.classList.remove(
+                        'edit-mode', 'glass-active', 'standard-mode'
+                    );
+                    if (mainContainer) {
+                        mainContainer.className = 'app-container grid-mode';
+                    }
+
+                    /* 4. Đóng tất cả modal / drawer / overlay đang mở */
+                    if (drawerEl) drawerEl.className = 'settings-drawer';
+                    if (overlay) overlay.classList.remove('open');
+                    if (themeModal) themeModal.classList.remove('show');
+                    if (infoModal) infoModal.classList.remove('show');
+                    if (themeOverlay) themeOverlay.classList.remove('show');
+
+                    /* 5. Xóa background image trực tiếp trên :root */
+                    rootEl.style.setProperty('--bg-image', 'none');
+                } catch (err) {
+                    console.warn('[Reset] Lỗi khi xóa:', err);
                 }
+
+                /* 6. Reload để load lại trạng thái mặc định */
+                setTimeout(() => {
+                    location.reload();
+                }, 150);
             });
         }
 
