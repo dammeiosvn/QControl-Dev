@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        /* Cập nhật HTML cho Đổ Bóng (Shadow) khớp với style xếp chồng */
+        /* Tạo HTML cho Đổ Bóng (Shadow) khớp với style xếp dọc dạt trái */
         try {
             const shadowContainer = document.getElementById('shadow-controls');
             if (shadowContainer) {
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <span class="slider-label" data-i18n="slider_opacity">Độ đậm bóng</span>
                                 <input type="range" class="s-o" min="0" max="100" value="100">
                             </div>
-                            <div class="color-swatch-row" style="grid-template-columns: 1fr; margin-top: 5px;">
+                            <div class="color-swatch-row" style="margin-top: 5px;">
                                 <div class="color-swatch">
                                     <span class="swatch-label" data-i18n="slider_color">Màu Bóng</span>
                                     <input type="color" class="s-c" value="#000000">
