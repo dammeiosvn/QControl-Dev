@@ -61,7 +61,7 @@ body.standard-mode .dev-only { display: none !important; }
 .app-container.intro-zoom { transform: scale(0.9); opacity: 0; }
 
 /* ============================================
-   ⭐ SLIDER ITEM
+   ⭐ SLIDER ITEM (Xếp dọc, dạt trái)
    ============================================ */
 .slider-item { 
     display: flex; 
@@ -380,33 +380,32 @@ select { width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,
 .config-actions-secondary .action-btn.danger { width: 100%; }
 
 /* ============================================
-   ⭐ BẢNG MÀU ÉP DỌC HOÀN TOÀN TỪ TRÊN XUỐNG CỦA SẾP
+   ⭐ BẢNG MÀU ÉP DỌC HOÀN TOÀN TỪ TRÊN XUỐNG
    ============================================ */
 .color-swatch-row {
     display: flex;
-    flex-direction: column; /* Ép dọc từ trên xuống dưới */
-    gap: 15px;              /* Khoảng cách giữa các cụm màu */
+    flex-direction: column;
+    gap: 15px;
     margin-top: 15px;
-    align-items: flex-start; /* Dạt tất cả về bên trái */
+    align-items: flex-start;
     width: 100%;
 }
 .color-swatch {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Ép chữ và nút màu dạt trái */
-    gap: 8px;               /* Khoảng cách giữa chữ và nút màu */
+    align-items: flex-start;
+    gap: 8px;
     width: 100%;
 }
 .color-swatch .swatch-label {
-    font-size: 14px;        /* Chỉnh to bằng tiêu đề thanh kéo */
+    font-size: 14px;
     font-weight: 500;
     color: rgba(255,255,255,0.9);
-    text-align: left;       /* Canh trái */
+    text-align: left;
     display: block;
     width: 100%;
 }
 
-/* Đảm bảo TOÀN BỘ nút chọn màu đều 30x30, tròn xoe và nằm bên trái */
 input[type="color"] {
     -webkit-appearance: none;
     appearance: none;
@@ -422,7 +421,7 @@ input[type="color"] {
     box-shadow: 0 2px 6px rgba(0,0,0,0.4);
     display: block;
     flex-shrink: 0;
-    margin: 0; /* Xóa margin canh giữa, để nó tựa lề trái */
+    margin: 0;
 }
 input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 input[type="color"]::-webkit-color-swatch {
@@ -567,7 +566,7 @@ input[type="color"]:active { transform: scale(0.92); border-color: #007aff; }
 .settings-drawer.anim-fade.open { opacity: 1; pointer-events: auto; }
 
 /* ============================================
-   HỆ THỐNG GIAO DIỆN TỰ ĐỘNG SÁNG/TỐI (THEO HỆ THỐNG)
+   HỆ THỐNG GIAO DIỆN TỰ ĐỘNG SÁNG/TỐI
    ============================================ */
 @media (prefers-color-scheme: light) {
     .settings-drawer { background: rgba(255, 255, 255, 0.95); color: #000000; }
