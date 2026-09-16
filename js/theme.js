@@ -1,8 +1,11 @@
 const DEV_MODE = true; 
 
-const PRESET_VERSION = 1;
-const THEME_VERSION = 1;
+const PRESET_VERSION = 2; // Tăng version để hiển thị lại chấm đỏ thông báo có preset mới
+const THEME_VERSION = 2;
 
+// ==========================================
+// 1. DATA ĐỔ BÓNG (SHADOW MODES)
+// ==========================================
 const SHADOW_MODES = [
     { id: 'inset', nameKey: 'shadow_inset', name: 'Bóng Chìm',     template: 'inset {x}px {y}px {b}px {s}px {c}' },
     { id: 'outer', nameKey: 'shadow_outer', name: 'Bóng Ngoài',    template: '{x}px {y}px {b}px {s}px {c}' },
@@ -26,50 +29,14 @@ const SHADOW_MODES = [
 document.addEventListener("DOMContentLoaded", () => {
     const root = document.documentElement;
     const mainContainer = document.getElementById('main-container');
-    const introScreen = document.getElementById('intro-screen');
-    const introTextWrapper = document.getElementById('intro-text-wrapper');
-
     const drawerEl = document.getElementById('settings-drawer');
     const overlay = document.getElementById('settings-overlay');
-    const openSettingsBtn = document.getElementById('open-settings');
-    const closeSettingsBtn = document.getElementById('close-settings');
-
-    const closeSettings = () => { 
-        if (drawerEl) drawerEl.classList.remove('open'); 
-        if (overlay) overlay.classList.remove('open'); 
-    };
-
-    if (openSettingsBtn && drawerEl && overlay) {
-        openSettingsBtn.addEventListener('click', (ev) => {
-            ev.preventDefault();
-            drawerEl.classList.add('open');
-            overlay.classList.add('open');
-        });
-    }
-    if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
-    if (overlay) overlay.addEventListener('click', closeSettings);
-
-    if (introTextWrapper) {
-        const effects = ['anim-wave', 'anim-bounce', 'anim-flip'];
-        const randomEffect = effects[Math.floor(Math.random() * effects.length)];
-        introTextWrapper.classList.add(randomEffect);
-    }
-
-    if (mainContainer) mainContainer.classList.add('intro-zoom');
-    
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            if (window.__dismissIntro) { window.__dismissIntro(); return; }
-            if (introScreen) {
-                introScreen.classList.add('dismiss'); 
-                if (mainContainer) mainContainer.classList.remove('intro-zoom'); 
-                setTimeout(() => { introScreen.style.display = 'none'; }, 500); 
-            }
-        }, 2000); 
-    });
 
     if (!DEV_MODE) document.body.classList.add('standard-mode');
 
+    // ==========================================
+    // 2. KHỞI TẠO GIAO DIỆN & TABS
+    // ==========================================
     try {
         const badgePreset = document.getElementById('badge-preset');
         const badgeTheme = document.getElementById('badge-theme');
@@ -86,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
             else badgeTheme.classList.remove('hidden');
         }
 
+        // Logic chuyển Tab
         const tabButtons = document.querySelectorAll('.settings-tab');
         const tabContents = document.querySelectorAll('.settings-tab-content');
         
@@ -114,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
+        // Tooltip cho Slider
         let globalTooltip = document.createElement('div');
         globalTooltip.className = 'slider-tooltip';
         document.body.appendChild(globalTooltip);
@@ -156,7 +125,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        /* Tạo HTML cho Đổ Bóng (Shadow) khớp với style xếp dọc dạt trái */
+        // ==========================================
+        // 3. TẠO GIAO DIỆN BÓNG (SHADOW) ĐỘNG
+        // Đã áp dụng class ép dọc, dạt trái chuẩn của sếp
+        // ==========================================
         try {
             const shadowContainer = document.getElementById('shadow-controls');
             if (shadowContainer) {
@@ -200,12 +172,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     shadowContainer.appendChild(div);
                 });
             }
+            // Gọi i18n lại một lần để dịch các thẻ bóng vừa tạo
+            if (window.applyI18n) window.applyI18n();
         } catch(errShadow) {
             console.error('Shadow render failed:', errShadow);
         }
 
+        // ==========================================
+        // 4. MODAL & CÁC CHỨC NĂNG BỔ TRỢ
+        // ==========================================
         let currentThemeTarget = 'frame';
-        
         function syncThemePickerVisuals(val) {
             document.querySelectorAll('.theme-chip').forEach(c => {
                 if (c.dataset.value === val) c.classList.add('active');
@@ -215,8 +191,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const themeModal = document.getElementById('theme-modal');
         const themeOverlay = document.getElementById('theme-overlay');
-        
         const btnMoreThemes = document.getElementById('btn-more-themes');
+        
         if (btnMoreThemes) {
             btnMoreThemes.onclick = () => { 
                 currentThemeTarget = 'frame';
@@ -372,23 +348,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (e.target.tagName === 'BUTTON' || e.target.type === 'checkbox' || e.target.closest('.theme-chip') || e.target.closest('.theme-chip-more')) playTick(); 
         });
 
-        let colorPickerLock = false;
-
         if (drawerEl) {
-            drawerEl.addEventListener('focusin', (e) => {
-                if (e.target && e.target.type === 'color') colorPickerLock = true;
-            });
-            drawerEl.addEventListener('focusout', (e) => {
-                if (e.target && e.target.type === 'color') {
-                    setTimeout(() => { colorPickerLock = false; }, 400);
-                }
-            });
             drawerEl.addEventListener('change', (e) => {
-                if (e.target.type === 'color') {
-                    updateLiveVariables(true);
-                    setTimeout(() => { colorPickerLock = false; }, 150);
-                } 
-                else if (e.target.type === 'checkbox') {
+                if (e.target.type === 'color' || e.target.type === 'checkbox') {
                     updateLiveVariables(true); 
                 }
             });
@@ -440,11 +402,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const uploadBg = document.getElementById('upload-bg');
         const fileDisplay = document.getElementById('file-name-display');
-        
         function updateFileNameDisplay(fileName) {
             if (!fileDisplay) return;
             const prefix = (window.i18nData && window.i18nData['file_selected_prefix']) || 'Đã chọn: ';
-            const emptyText = (window.i18nData && window.i18nData['file_none_selected']) || 'chưa chọn tệp nào';
+            const emptyText = (window.i18nData && window.i18nData['file_none_selected']) || 'Chưa chọn tệp nào';
             if (fileName) {
                 fileDisplay.textContent = prefix + fileName;
                 fileDisplay.classList.add('has-file');
@@ -453,7 +414,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 fileDisplay.classList.remove('has-file');
             }
         }
-        window.__updateFileNameDisplay = updateFileNameDisplay;
         
         if (uploadBg) {
             uploadBg.addEventListener('change', (e) => {
@@ -498,6 +458,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (btnLayoutList) btnLayoutList.onclick = () => { setLayoutMode('list'); resetPresetToCustom(); }; 
         if (btnLayoutGrid) btnLayoutGrid.onclick = () => { setLayoutMode('grid'); resetPresetToCustom(); };
 
+        // ==========================================
+        // 5. CÁC HÀM XỬ LÝ MÀU VÀ ĐỔ BÓNG
+        // ==========================================
         function hexToRgba(hex, alpha) {
             let r = 0, g = 0, b = 0;
             if (!hex) return `rgba(0,0,0,${alpha / 100})`;
@@ -543,44 +506,54 @@ document.addEventListener("DOMContentLoaded", () => {
             root.style.setProperty('--btn-shadow', combinedShadow || 'none');
         }
 
+        // ==========================================
+        // 6. XUẤT / NHẬP / LƯU TRỮ LOCALSTORAGE
+        // ==========================================
         function g(id) { const el = document.getElementById(id); return el ? el.value : ''; }
         function c(id) { const el = document.getElementById(id); return el ? el.checked : false; }
 
+        // BẢNG MAP ID VÀ LOCALSTORAGE (Phải khớp chính xác HTML mới nhất)
+        const KEYS = [
+            { id: 'val-bg-main', key: 'bgMain' },
+            { id: 'val-text-color', key: 'textColor' },
+            { id: 'val-list-bg', key: 'listBg' },
+            { id: 'val-list-bg-opacity', key: 'listBgOpacity' },
+            { id: 'val-list-text', key: 'listText' },
+            { id: 'val-list-svg', key: 'listSvg' },
+            { id: 'val-theme-frame', key: 'themeFrame' },
+            { id: 'val-frame-size', key: 'frameSize' },
+            { id: 'val-svg-size', key: 'svgSize' },
+            { id: 'val-svg-opacity', key: 'svgOpacity' },
+            { id: 'val-frame-radius', key: 'frameRadius' },
+            { id: 'val-frame-color', key: 'frameColor' },
+            { id: 'val-frame-bg-opacity', key: 'frameBgOpacity' },
+            { id: 'val-svg-color', key: 'svgColor' },
+            { id: 'toggle-hide-labels', key: 'hideLabels', isCheck: true },
+            { id: 'toggle-list-frame', key: 'listFrame', isCheck: true },
+            { id: 'val-title-size', key: 'titleSize' },
+            { id: 'val-title-spacing', key: 'titleSpacing' },
+            { id: 'val-icon-spacing', key: 'iconSpacing' },
+            { id: 'toggle-glass', key: 'glassMode', isCheck: true },
+            { id: 'toggle-audio', key: 'audioFeedback', isCheck: true },
+            { id: 'val-media-width', key: 'mediaWidth' },
+            { id: 'val-media-bg-opacity', key: 'mediaBgOpacity' },
+            { id: 'val-media-btn-size', key: 'mediaBtnSize' },
+            { id: 'val-media-bg-color', key: 'mediaBgColor' },
+            { id: 'val-media-btn-color', key: 'mediaBtnColor' },
+            { id: 'val-media-svg-color', key: 'mediaSvgColor' },
+            { id: 'toggle-media-theme', key: 'mediaThemeSync', isCheck: true },
+            { id: 'toggle-theme-dot', key: 'themeDot', isCheck: true },
+            { id: 'val-thumb-size', key: 'thumbSize' },
+            { id: 'val-thumb-color', key: 'thumbColor' },
+            { id: 'val-thumb-theme', key: 'thumbTheme' }
+        ];
+
         function saveSettingsToLocal() {
             try {
-                localStorage.setItem('sttv_bgMain', g('val-bg-main'));
-                localStorage.setItem('sttv_textColor', g('val-text-color'));
-                localStorage.setItem('sttv_listBg', g('val-list-bg'));
-                localStorage.setItem('sttv_listBgOpacity', g('val-list-bg-opacity'));
-                localStorage.setItem('sttv_listText', g('val-list-text'));
-                localStorage.setItem('sttv_listSvg', g('val-list-svg'));
-                localStorage.setItem('sttv_themeFrame', g('val-theme-frame'));
-                localStorage.setItem('sttv_frameSize', g('val-frame-size'));
-                localStorage.setItem('sttv_svgSize', g('val-svg-size'));
-                localStorage.setItem('sttv_svgOpacity', g('val-svg-opacity'));
-                localStorage.setItem('sttv_frameRadius', g('val-frame-radius'));
-                localStorage.setItem('sttv_frameColor', g('val-frame-color'));
-                localStorage.setItem('sttv_frameBgOpacity', g('val-frame-bg-opacity'));
-                localStorage.setItem('sttv_svgColor', g('val-svg-color'));
-                localStorage.setItem('sttv_hideLabels', c('toggle-hide-labels'));
-                localStorage.setItem('sttv_listFrame', c('toggle-list-frame'));
-                localStorage.setItem('sttv_titleSize', g('val-title-size'));
-                localStorage.setItem('sttv_titleSpacing', g('val-title-spacing'));
-                localStorage.setItem('sttv_iconSize', g('val-icon-size'));
-                localStorage.setItem('sttv_iconSpacing', g('val-icon-spacing'));
-                localStorage.setItem('sttv_glassMode', c('toggle-glass'));
-                localStorage.setItem('sttv_audioFeedback', c('toggle-audio'));
-                localStorage.setItem('sttv_mediaWidth', g('val-media-width'));
-                localStorage.setItem('sttv_mediaBgOpacity', g('val-media-bg-opacity'));
-                localStorage.setItem('sttv_mediaBtnSize', g('val-media-btn-size'));
-                localStorage.setItem('sttv_mediaBgColor', g('val-media-bg-color'));
-                localStorage.setItem('sttv_mediaBtnColor', g('val-media-btn-color'));
-                localStorage.setItem('sttv_mediaSvgColor', g('val-media-svg-color'));
-                localStorage.setItem('sttv_mediaThemeSync', c('toggle-media-theme'));
-                localStorage.setItem('sttv_themeDot', c('toggle-theme-dot'));
-                localStorage.setItem('sttv_thumbSize', g('val-thumb-size'));
-                localStorage.setItem('sttv_thumbColor', g('val-thumb-color'));
-                localStorage.setItem('sttv_thumbTheme', g('val-thumb-theme'));
+                KEYS.forEach(item => {
+                    const el = document.getElementById(item.id);
+                    if (el) localStorage.setItem('sttv_' + item.key, item.isCheck ? el.checked : el.value);
+                });
 
                 const shadowState = {};
                 SHADOW_MODES.forEach(mode => {
@@ -612,27 +585,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
+            // Gói dữ liệu theo chuẩn mảng (Giữ đúng Index để unpack không bị lệch)
             const configValues = [
-                g('val-bg-main'), g('val-text-color'),
-                localStorage.getItem('sttv_layoutMode') || 'grid', g('val-list-bg'),
-                g('val-list-text'), g('val-list-svg'),
-                g('val-theme-frame'), g('val-frame-size'),
-                g('val-svg-size'), g('val-svg-opacity'),
-                g('val-frame-radius'), g('val-frame-color'),
-                g('val-svg-color'), c('toggle-hide-labels') ? 1 : 0,
-                g('val-title-size'), g('val-title-spacing'),
-                c('toggle-list-frame') ? 1 : 0, g('val-icon-size'),
-                g('val-icon-spacing'), g('val-list-bg-opacity'),
-                g('val-frame-bg-opacity'), g('val-media-width'),
-                g('val-media-bg-opacity'), g('val-media-btn-size'),
-                g('val-media-bg-color'), g('val-media-btn-color'),
-                g('val-media-svg-color'), c('toggle-glass') ? 1 : 0,
-                g('val-popup-anim'), shadowArr.join('~'),
-                c('toggle-media-theme') ? 1 : 0,
-                c('toggle-theme-dot') ? 1 : 0,
-                g('val-thumb-size'),
-                g('val-thumb-color'),
-                g('val-thumb-theme')
+                g('val-bg-main'), g('val-text-color'), localStorage.getItem('sttv_layoutMode') || 'grid', 
+                g('val-list-bg'), g('val-list-text'), g('val-list-svg'), g('val-theme-frame'), 
+                g('val-frame-size'), g('val-svg-size'), g('val-svg-opacity'), g('val-frame-radius'), 
+                g('val-frame-color'), g('val-svg-color'), c('toggle-hide-labels') ? 1 : 0, 
+                g('val-title-size'), g('val-title-spacing'), c('toggle-list-frame') ? 1 : 0, 
+                g('val-icon-spacing'), g('val-list-bg-opacity'), g('val-frame-bg-opacity'), 
+                g('val-media-width'), g('val-media-bg-opacity'), g('val-media-btn-size'), 
+                g('val-media-bg-color'), g('val-media-btn-color'), g('val-media-svg-color'), 
+                c('toggle-glass') ? 1 : 0, g('val-popup-anim'), shadowArr.join('~'), 
+                c('toggle-media-theme') ? 1 : 0, c('toggle-theme-dot') ? 1 : 0, g('val-thumb-size'), 
+                g('val-thumb-color'), g('val-thumb-theme')
             ];
             return encodeURIComponent(configValues.join('|'));
         }
@@ -644,30 +609,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 localStorage.removeItem('sttv_customBgImage');
                 root.style.setProperty('--bg-image', 'none');
                 if (uploadBg) uploadBg.value = "";
-                if (window.__updateFileNameDisplay) window.__updateFileNameDisplay(null);
-
+                
                 const decoded = decodeURIComponent(code.trim());
                 const data = decoded.split('|');
-                if (data.length < 29) { alert("Mã cấu hình không hợp lệ!"); return; }
+                if (data.length < 28) { alert("Mã cấu hình không hợp lệ!"); return; }
                 
                 const setV = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
                 const setC = (id, v) => { const el = document.getElementById(id); if (el) el.checked = v; };
                 
-                setV('val-bg-main', data[0]); setV('val-text-color', data[1]);
-                setLayoutMode(data[2]); setV('val-list-bg', data[3]);
-                setV('val-list-text', data[4]); setV('val-list-svg', data[5]);
-                setV('val-theme-frame', data[6]);
-                setV('val-frame-size', data[7]); setV('val-svg-size', data[8]); 
-                setV('val-svg-opacity', data[9]); setV('val-frame-radius', data[10]); 
-                setV('val-frame-color', data[11]); setV('val-svg-color', data[12]);
-                setC('toggle-hide-labels', data[13] === '1'); setV('val-title-size', data[14]);
-                setV('val-title-spacing', data[15]); setC('toggle-list-frame', data[16] === '1');
-                setV('val-icon-size', data[17]); setV('val-icon-spacing', data[18]);
-                setV('val-list-bg-opacity', data[19]); setV('val-frame-bg-opacity', data[20]);
-                setV('val-media-width', data[21]); setV('val-media-bg-opacity', data[22]);
-                setV('val-media-btn-size', data[23]); setV('val-media-bg-color', data[24]);
-                setV('val-media-btn-color', data[25]); setV('val-media-svg-color', data[26]);
-                setC('toggle-glass', data[27] === '1'); setV('val-popup-anim', data[28]);
+                setV('val-bg-main', data[0]); setV('val-text-color', data[1]); setLayoutMode(data[2]); 
+                setV('val-list-bg', data[3]); setV('val-list-text', data[4]); setV('val-list-svg', data[5]); 
+                setV('val-theme-frame', data[6]); setV('val-frame-size', data[7]); setV('val-svg-size', data[8]); 
+                setV('val-svg-opacity', data[9]); setV('val-frame-radius', data[10]); setV('val-frame-color', data[11]); 
+                setV('val-svg-color', data[12]); setC('toggle-hide-labels', data[13] === '1'); setV('val-title-size', data[14]); 
+                setV('val-title-spacing', data[15]); setC('toggle-list-frame', data[16] === '1'); 
+                setV('val-icon-spacing', data[17]); setV('val-list-bg-opacity', data[18]); setV('val-frame-bg-opacity', data[19]); 
+                setV('val-media-width', data[20]); setV('val-media-bg-opacity', data[21]); setV('val-media-btn-size', data[22]); 
+                setV('val-media-bg-color', data[23]); setV('val-media-btn-color', data[24]); setV('val-media-svg-color', data[25]); 
+                setC('toggle-glass', data[26] === '1'); setV('val-popup-anim', data[27]);
                 
                 document.querySelectorAll('.shadow-switch').forEach(chk => { 
                     chk.checked = false; 
@@ -675,8 +634,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (drw) drw.classList.remove('active'); 
                 });
 
-                if (data[29]) {
-                    const shadows = data[29].split('~');
+                if (data[28]) {
+                    const shadows = data[28].split('~');
                     shadows.forEach(sh => {
                         const p = sh.split('*');
                         if (p.length > 1) {
@@ -687,30 +646,23 @@ document.addEventListener("DOMContentLoaded", () => {
                                 const drw = document.getElementById(`drawer-${sId}`); 
                                 if (drw) {
                                     drw.classList.add('active');
-                                    drw.querySelector('.s-x').value = p[1]; 
-                                    drw.querySelector('.s-y').value = p[2];
-                                    drw.querySelector('.s-b').value = p[3]; 
-                                    drw.querySelector('.s-s').value = p[4]; 
-                                    drw.querySelector('.s-c').value = p[5]; 
-                                    if (p[6]) drw.querySelector('.s-o').value = p[6];
+                                    drw.querySelector('.s-x').value = p[1]; drw.querySelector('.s-y').value = p[2];
+                                    drw.querySelector('.s-b').value = p[3]; drw.querySelector('.s-s').value = p[4]; 
+                                    drw.querySelector('.s-c').value = p[5]; if (p[6]) drw.querySelector('.s-o').value = p[6];
                                 }
                             }
                         }
                     });
                 }
 
-                if (data[30] !== undefined) setC('toggle-media-theme', data[30] === '1');
-                if (data[31] !== undefined) setC('toggle-theme-dot', data[31] === '1'); 
-                else setC('toggle-theme-dot', true);
-                if (data[32] !== undefined) setV('val-thumb-size', data[32]);
-                if (data[33] !== undefined) setV('val-thumb-color', data[33]);
-                if (data[34] !== undefined) setV('val-thumb-theme', data[34]);
+                if (data[29] !== undefined) setC('toggle-media-theme', data[29] === '1');
+                if (data[30] !== undefined) setC('toggle-theme-dot', data[30] === '1'); else setC('toggle-theme-dot', true);
+                if (data[31] !== undefined) setV('val-thumb-size', data[31]);
+                if (data[32] !== undefined) setV('val-thumb-color', data[32]);
+                if (data[33] !== undefined) setV('val-thumb-theme', data[33]);
 
                 updateLiveVariables(true);
-            } catch(e) { 
-                console.error(e); 
-                alert("Lỗi đọc mã cấu hình! Vui lòng thử lại."); 
-            }
+            } catch(e) { console.error(e); alert("Lỗi đọc mã cấu hình! Vui lòng thử lại."); }
         }
 
         const btnExport = document.getElementById('btn-export');
@@ -719,12 +671,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.preventDefault(); 
                 const code = packConfig();
                 if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(code).then(() => { 
-                        alert("Đã sao chép mã cấu hình thành công!"); 
-                    }).catch(() => { prompt("Sao chép mã cấu hình bên dưới:", code); });
-                } else {
-                    prompt("Sao chép mã cấu hình bên dưới:", code);
-                }
+                    navigator.clipboard.writeText(code).then(() => { alert("Đã sao chép mã cấu hình thành công!"); })
+                    .catch(() => { prompt("Sao chép mã cấu hình bên dưới:", code); });
+                } else { prompt("Sao chép mã cấu hình bên dưới:", code); }
             });
         }
 
@@ -741,67 +690,29 @@ document.addEventListener("DOMContentLoaded", () => {
         if (btnResetDefault) {
             btnResetDefault.addEventListener('click', (e) => {
                 e.preventDefault();
-                const ok = confirm(
-                    '⚠️ KHÔI PHỤC MẶC ĐỊNH\n\n' +
-                    '• Xóa toàn bộ tuỳ chỉnh (màu sắc, kích thước, theme)\n' +
-                    '• Xóa hình nền tự chọn\n' +
-                    '• Xóa theme đang dùng và hiệu ứng đang bật\n' +
-                    '• Đưa WebClip về trạng thái ban đầu khi mở lần đầu\n\n' +
-                    'Thao tác này KHÔNG THỂ hoàn tác. Bạn chắc chắn?'
-                );
+                const ok = confirm('⚠️ KHÔI PHỤC MẶC ĐỊNH\n\nXóa toàn bộ cấu hình, hình nền và theme. Hành động này không thể hoàn tác. Bạn chắc chắn?');
                 if (!ok) return;
 
-                try {
-                    const keysToRemove = [];
-                    for (let i = 0; i < localStorage.length; i++) {
-                        const key = localStorage.key(i);
-                        if (key && key.startsWith('sttv_')) keysToRemove.push(key);
-                    }
-                    keysToRemove.forEach(k => localStorage.removeItem(k));
-
-                    const rootEl = document.documentElement;
-                    const cssVarsToReset = [
-                        '--bg-main', '--text-color', '--frame-size', '--svg-size',
-                        '--svg-color', '--svg-opacity', '--frame-border-radius',
-                        '--list-border-radius', '--title-size', '--title-spacing',
-                        '--icon-font-size', '--icon-spacing', '--label-display',
-                        '--list-bg-color', '--list-bg-rgba', '--list-text-color',
-                        '--list-svg-color', '--frame-bg', '--frame-bg-color',
-                        '--btn-shadow', '--media-bg-rgb', '--media-bg-opacity',
-                        '--media-width', '--media-btn-color', '--media-svg-color',
-                        '--media-btn-size', '--media-btn-play', '--thumb-size',
-                        '--thumb-color', '--thumb-bg-image', '--bg-image',
-                        '--tilt-x', '--tilt-y'
-                    ];
-                    cssVarsToReset.forEach(v => rootEl.style.removeProperty(v));
-
-                    document.body.classList.remove(
-                        'edit-mode', 'glass-active', 'standard-mode'
-                    );
-                    if (mainContainer) {
-                        mainContainer.className = 'app-container grid-mode';
-                    }
-
-                    if (drawerEl) drawerEl.className = 'settings-drawer';
-                    if (overlay) overlay.classList.remove('open');
-                    if (themeModal) themeModal.classList.remove('show');
-                    if (infoModal) infoModal.classList.remove('show');
-                    if (themeOverlay) themeOverlay.classList.remove('show');
-
-                    rootEl.style.setProperty('--bg-image', 'none');
-                } catch (err) {
-                    console.warn('[Reset] Lỗi khi xóa:', err);
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.startsWith('sttv_')) keysToRemove.push(key);
                 }
-
-                setTimeout(() => {
-                    location.reload();
-                }, 150);
+                keysToRemove.forEach(k => localStorage.removeItem(k));
+                setTimeout(() => { location.reload(); }, 150);
             });
         }
 
+        // ==========================================
+        // 7. HÀM CẬP NHẬT CSS VARIABLES (LÕI CỦA UI)
+        // ==========================================
         function updateLiveVariables(saveNow = false) {
             root.style.setProperty('--bg-main', g('val-bg-main'));
-            root.style.setProperty('--text-color', g('val-text-color'));
+            
+            // Xử lý màu chữ cho Grid và List riêng biệt
+            const isList = (localStorage.getItem('sttv_layoutMode') || 'grid') === 'list';
+            root.style.setProperty('--text-color', isList ? g('val-list-text') : g('val-text-color'));
+            
             root.style.setProperty('--frame-size', g('val-frame-size') + 'px');
             root.style.setProperty('--svg-size', g('val-svg-size') + 'px');
             root.style.setProperty('--svg-color', g('val-svg-color'));
@@ -813,22 +724,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             root.style.setProperty('--title-size', g('val-title-size') + 'px');
             root.style.setProperty('--title-spacing', g('val-title-spacing') + 'px');
-            root.style.setProperty('--icon-font-size', g('val-icon-size') + 'px');
             root.style.setProperty('--icon-spacing', g('val-icon-spacing') + 'px');
             root.style.setProperty('--label-display', c('toggle-hide-labels') ? 'none' : 'block');
             
-            const currentLayout = localStorage.getItem('sttv_layoutMode') || 'grid';
             if (btnLayoutList && btnLayoutGrid && mainContainer) {
-                if (currentLayout === 'list') { 
-                    btnLayoutList.classList.add('active'); 
-                    btnLayoutGrid.classList.remove('active'); 
-                    mainContainer.classList.add('list-mode'); 
-                    mainContainer.classList.remove('grid-mode'); 
+                if (isList) { 
+                    btnLayoutList.classList.add('active'); btnLayoutGrid.classList.remove('active'); 
+                    mainContainer.classList.add('list-mode'); mainContainer.classList.remove('grid-mode'); 
                 } else { 
-                    btnLayoutGrid.classList.add('active'); 
-                    btnLayoutList.classList.remove('active'); 
-                    mainContainer.classList.add('grid-mode'); 
-                    mainContainer.classList.remove('list-mode'); 
+                    btnLayoutGrid.classList.add('active'); btnLayoutList.classList.remove('active'); 
+                    mainContainer.classList.add('grid-mode'); mainContainer.classList.remove('list-mode'); 
                 }
             }
 
@@ -901,58 +806,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         function loadSettingsFromLocal() {
-            const safeSet = (id, key, fallback, isCheck = false) => {
-                const el = document.getElementById(id); 
+            KEYS.forEach(item => {
+                const el = document.getElementById(item.id);
                 if (!el) return;
-                const val = localStorage.getItem('sttv_' + key);
-                if (isCheck) el.checked = val === 'true' ? true : (val === null ? fallback : false);
-                else el.value = val !== null ? val : fallback;
-            };
-
-            safeSet('val-bg-main', 'bgMain', '#121b22'); 
-            safeSet('val-text-color', 'textColor', '#ffffff');
-            safeSet('val-list-bg', 'listBg', '#1a1a1a'); 
-            safeSet('val-list-bg-opacity', 'listBgOpacity', '10');
-            safeSet('val-list-text', 'listText', '#ffffff'); 
-            safeSet('val-list-svg', 'listSvg', '#ffffff');
+                const val = localStorage.getItem('sttv_' + item.key);
+                if (item.isCheck) el.checked = val === 'true' ? true : (val === null ? (el.hasAttribute('checked') ? true : false) : false);
+                else el.value = val !== null ? val : el.defaultValue || el.getAttribute('value');
+            });
             
+            // Xử lý riêng cho các thẻ select
             const vtf = document.getElementById('val-theme-frame');
             if (vtf) vtf.value = localStorage.getItem('sttv_themeFrame') || 'none';
+            const presetSelect = document.getElementById('val-theme-preset');
             if (presetSelect) presetSelect.value = localStorage.getItem('sttv_activePreset') || 'none';
-            
-            const savedAnim = localStorage.getItem('sttv_popupAnim') || 'default';
-            if (popupAnimSelect) popupAnimSelect.value = savedAnim;
-            if (savedAnim !== 'default' && drawerEl) drawerEl.classList.add(savedAnim);
-
-            safeSet('val-frame-size', 'frameSize', '60'); 
-            safeSet('val-svg-size', 'svgSize', '28'); 
-            safeSet('val-svg-opacity', 'svgOpacity', '100'); 
-            safeSet('val-svg-color', 'svgColor', '#ffffff'); 
-            safeSet('val-frame-radius', 'frameRadius', '22'); 
-            safeSet('val-frame-color', 'frameColor', '#000000'); 
-            safeSet('val-frame-bg-opacity', 'frameBgOpacity', '100');
-            
-            safeSet('toggle-hide-labels', 'hideLabels', false, true); 
-            safeSet('toggle-list-frame', 'listFrame', false, true);
-            safeSet('val-title-size', 'titleSize', '22'); 
-            safeSet('val-title-spacing', 'titleSpacing', '0.5');
-            safeSet('val-icon-size', 'iconSize', '14'); 
-            safeSet('val-icon-spacing', 'iconSpacing', '0');
-            safeSet('toggle-glass', 'glassMode', false, true); 
-            safeSet('toggle-audio', 'audioFeedback', false, true);
-            safeSet('toggle-parallax', 'parallax', false, true);
-
-            safeSet('val-media-width', 'mediaWidth', '90'); 
-            safeSet('val-media-bg-opacity', 'mediaBgOpacity', '3');
-            safeSet('val-media-btn-size', 'mediaBtnSize', '50'); 
-            safeSet('val-media-bg-color', 'mediaBgColor', '#ffffff');
-            safeSet('val-media-btn-color', 'mediaBtnColor', '#ffffff'); 
-            safeSet('val-media-svg-color', 'mediaSvgColor', '#ffffff');
-            safeSet('toggle-media-theme', 'mediaThemeSync', false, true);
-            
-            safeSet('toggle-theme-dot', 'themeDot', true, true);
-            safeSet('val-thumb-size', 'thumbSize', '25');
-            safeSet('val-thumb-color', 'thumbColor', '#ffffff');
+            const popupAnimSelect = document.getElementById('val-popup-anim');
+            if (popupAnimSelect) {
+                const savedAnim = localStorage.getItem('sttv_popupAnim') || 'default';
+                popupAnimSelect.value = savedAnim;
+                if (savedAnim !== 'default' && drawerEl) drawerEl.classList.add(savedAnim);
+            }
             const vtt = document.getElementById('val-thumb-theme');
             if (vtt) vtt.value = localStorage.getItem('sttv_thumbTheme') || 'none';
 
@@ -967,29 +839,14 @@ document.addEventListener("DOMContentLoaded", () => {
                             const drawer = document.getElementById(`drawer-${mode.id}`);
                             if (checkbox && drawer) {
                                 checkbox.checked = item.active;
-                                if (item.active) drawer.classList.add('active'); 
-                                else drawer.classList.remove('active');
-                                drawer.querySelector('.s-x').value = item.x; 
-                                drawer.querySelector('.s-y').value = item.y;
-                                drawer.querySelector('.s-b').value = item.b; 
-                                drawer.querySelector('.s-s').value = item.s;
-                                drawer.querySelector('.s-c').value = item.c; 
-                                drawer.querySelector('.s-o').value = item.o;
+                                if (item.active) drawer.classList.add('active'); else drawer.classList.remove('active');
+                                drawer.querySelector('.s-x').value = item.x; drawer.querySelector('.s-y').value = item.y;
+                                drawer.querySelector('.s-b').value = item.b; drawer.querySelector('.s-s').value = item.s;
+                                drawer.querySelector('.s-c').value = item.c; drawer.querySelector('.s-o').value = item.o;
                             }
                         }
                     });
-                } catch(e) { console.warn('Shadow parse error:', e); }
-            }
-
-            const initLayout = localStorage.getItem('sttv_layoutMode') || 'grid';
-            if (btnLayoutList && btnLayoutGrid) {
-                if (initLayout === 'list') { 
-                    btnLayoutList.classList.add('active'); 
-                    btnLayoutGrid.classList.remove('active'); 
-                } else { 
-                    btnLayoutGrid.classList.add('active'); 
-                    btnLayoutList.classList.remove('active'); 
-                }
+                } catch(e) {}
             }
 
             const savedBg = localStorage.getItem('sttv_customBgImage'); 
@@ -1005,6 +862,5 @@ document.addEventListener("DOMContentLoaded", () => {
         window.addEventListener("beforeunload", saveSettingsToLocal);
     } catch(err) {
         console.error('Theme.js crashed:', err);
-        if (window.__dismissIntro) window.__dismissIntro();
     }
 });
