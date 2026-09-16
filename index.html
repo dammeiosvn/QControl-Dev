@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-title" content="Control Panel">
     <link rel="apple-touch-icon" href="icon.png">
     <title>Trung tâm điều khiển - Sentechtipvn</title>
-    <link rel="stylesheet" href="CSS/style.css?v=23">
+    <link rel="stylesheet" href="CSS/style.css?v=24">
 </head>
 <body>
 
@@ -80,8 +80,9 @@
 
         <div class="settings-body">
 
-            <!-- TAB 1: GIAO DIỆN -->
+            <!-- TAB 1: GIAO DIỆN TỔNG QUAN -->
             <div class="settings-tab-content active" data-tab="tab-appearance">
+                
                 <div class="config-actions">
                     <button id="btn-export" class="action-btn">📤 <span data-i18n="btn_export">Xuất</span></button>
                     <button id="btn-import" class="action-btn">📥 <span data-i18n="btn_import">Nhập</span></button>
@@ -111,69 +112,78 @@
                         <option value="anim-slide-top" data-i18n="opt_anim_slide_top">Trượt từ trên xuống</option>
                         <option value="anim-fade" data-i18n="opt_anim_fade">Làm mờ (Fade)</option>
                     </select>
-
-                    <div class="feature-toggles">
-                        <label><span data-i18n="lbl_audio_feedback">🎚️ Âm thanh</span><input type="checkbox" id="toggle-audio"></label>
-                        <label><span data-i18n="lbl_parallax">🧭 Hiệu ứng 3D</span><input type="checkbox" id="toggle-parallax"></label>
-                    </div>
                 </div>
 
                 <div class="setting-group highlight-box">
-                    <label data-i18n="lbl_quick_palette">🎨 Bảng màu danh sách</label>
+                    <label data-i18n="lbl_bg_image">📱 Nền ứng dụng</label>
                     <div class="color-swatch-row">
                         <div class="color-swatch">
-                            <span class="swatch-label" data-i18n="swatch_bg_main_short">Màu nền</span>
+                            <span class="swatch-label" data-i18n="swatch_bg_main_short">Màu nền chính</span>
                             <input type="color" id="val-bg-main" value="#121b22">
                         </div>
-                        <div class="color-swatch">
-                            <span class="swatch-label" data-i18n="swatch_text_color_short">Màu chữ</span>
-                            <input type="color" id="val-text-color" value="#ffffff">
-                        </div>
-                        <div class="color-swatch">
-                            <span class="swatch-label" data-i18n="swatch_list_bg_short">Nền danh sách</span>
-                            <input type="color" id="val-list-bg" value="#1a1a1a">
-                        </div>
-                        <div class="color-swatch">
-                            <span class="swatch-label" data-i18n="swatch_list_text_short">Chữ danh sách</span>
-                            <input type="color" id="val-list-text" value="#ffffff">
-                        </div>
-                        <div class="color-swatch">
-                            <span class="swatch-label" data-i18n="swatch_list_svg_short">SVG danh sách</span>
-                            <input type="color" id="val-list-svg" value="#ffffff">
-                        </div>
                     </div>
-                </div>
-
-                <div class="setting-group">
-                    <label data-i18n="lbl_bg_image">📱 Hình nền tự chọn</label>
+                    <hr style="border: 0; border-top: 1px solid rgba(150,150,150,0.2); margin: 15px 0 10px 0;">
                     <label class="file-input-wrapper" for="upload-bg">
                         <input type="file" id="upload-bg" accept="image/*">
                         <span class="file-input-btn" data-i18n="btn_choose_file">Chọn tệp</span>
-                        <span class="file-input-name" id="file-name-display" data-i18n="file_none_selected">chưa chọn tệp nào</span>
+                        <span class="file-input-name" id="file-name-display" data-i18n="file_none_selected">Chưa chọn tệp nào</span>
                     </label>
                     <button type="button" id="clear-bg" class="clear-bg-btn" data-i18n="btn_clear_bg">Xóa ảnh nền</button>
                 </div>
 
-                <div class="setting-group"><label><input type="checkbox" id="toggle-glass"> <span data-i18n="lbl_glassmorphism">Bật Kính mờ</span></label></div>
+                <div class="setting-group highlight-box">
+                    <label>✨ Hiệu ứng phụ</label>
+                    <div class="feature-toggles">
+                        <label><span data-i18n="lbl_audio_feedback">🎚️ Âm thanh chạm</span><input type="checkbox" id="toggle-audio"></label>
+                        <label><span data-i18n="lbl_parallax">🧭 Nghiêng 3D (Parallax)</span><input type="checkbox" id="toggle-parallax"></label>
+                        <label><span data-i18n="lbl_glassmorphism">🧊 Kính mờ (Glassmorphism)</span><input type="checkbox" id="toggle-glass"></label>
+                    </div>
+                </div>
 
                 <div class="setting-group">
-                    <label data-i18n="lbl_layout_mode">Danh sách/Lưới</label>
+                    <label data-i18n="lbl_layout_mode">Bố cục hiển thị</label>
                     <div class="layout-buttons">
                         <button id="btn-layout-list" class="layout-btn" data-i18n="btn_list">Danh sách</button>
                         <button id="btn-layout-grid" class="layout-btn active" data-i18n="btn_grid">Lưới</button>
                     </div>
                 </div>
+            </div>
 
+            <!-- TAB 2: TIÊU ĐỀ (Chữ) -->
+            <div class="settings-tab-content" data-tab="tab-title">
                 <div class="setting-group highlight-box">
-                    <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_list_bg_opacity">Đậm nhạt</span>
-                        <input type="range" id="val-list-bg-opacity" min="0" max="100" value="10">
+                    <label data-i18n="lbl_title_adjust">Màu sắc & Kích thước Chữ</label>
+                    <div class="color-swatch-row">
+                        <div class="color-swatch">
+                            <span class="swatch-label" data-i18n="swatch_text_color_short">Màu chữ (Dạng Lưới)</span>
+                            <input type="color" id="val-text-color" value="#ffffff">
+                        </div>
+                        <div class="color-swatch">
+                            <span class="swatch-label" data-i18n="swatch_list_text_short">Màu chữ (Dạng Danh sách)</span>
+                            <input type="color" id="val-list-text" value="#ffffff">
+                        </div>
                     </div>
-                    <label style="margin-top: 10px;"><input type="checkbox" id="toggle-list-frame"> <span data-i18n="lbl_list_frame">Chủ đề danh sách</span></label>
+                    
+                    <hr style="border: 0; border-top: 1px solid rgba(150,150,150,0.2); margin: 15px 0;">
+                    
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_title_size">🔠 Cỡ chữ</span>
+                        <input type="range" id="val-title-size" min="14" max="40" value="22">
+                    </div>
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_title_spacing">📐 Khoảng cách chữ</span>
+                        <input type="range" id="val-title-spacing" min="0" max="10" step="0.5" value="0.5">
+                    </div>
+                    
+                    <label style="margin-top: 10px;"><input type="checkbox" id="toggle-hide-labels"> <span data-i18n="lbl_hide_labels">Ẩn tên tiêu đề</span></label>
                 </div>
+            </div>
 
-                <div class="setting-group" style="position: relative;">
-                    <label data-i18n="lbl_theme_frame">💠 CHỦ ĐỀ <span class="badge-dot" id="badge-theme"></span></label>
+            <!-- TAB 3: KHUNG & ICON -->
+            <div class="settings-tab-content" data-tab="tab-frame">
+                
+                <div class="setting-group highlight-box" style="position: relative;">
+                    <label data-i18n="lbl_theme_frame">💠 CHỦ ĐỀ KHUNG <span class="badge-dot" id="badge-theme"></span></label>
                     <div class="theme-grid-picker">
                         <div class="theme-chip active" data-value="none"><span style="font-size: 18px;">❌</span></div>
                         <div class="theme-chip" data-value="Theme/Black-Colour.png"><img src="Theme/Black-Colour.png" alt="Black"></div>
@@ -184,123 +194,123 @@
                     </div>
                     <input type="hidden" id="val-theme-frame" value="none">
                 </div>
-            </div>
 
-            <!-- TAB 2: TIÊU ĐỀ -->
-            <div class="settings-tab-content" data-tab="tab-title">
                 <div class="setting-group highlight-box">
-                    <label data-i18n="lbl_title_adjust">Sửa tiêu đề</label>
-                    <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_title_size">🔠 Tên</span>
-                        <input type="range" id="val-title-size" min="14" max="40" value="22">
-                    </div>
-                    <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_title_spacing">📐 Khoảng cách</span>
-                        <input type="range" id="val-title-spacing" min="0" max="10" step="0.5" value="0.5">
-                    </div>
-                    <hr style="border: 0; border-top: 1px solid rgba(150,150,150,0.2); margin: 10px 0;">
-                    <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_icon_size">🔠 iCon</span>
-                        <input type="range" id="val-icon-size" min="10" max="25" value="14">
-                    </div>
-                    <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_icon_spacing">📐 Khoảng cách</span>
-                        <input type="range" id="val-icon-spacing" min="0" max="5" step="0.1" value="0">
-                    </div>
-                    <label style="margin-top: 10px;"><input type="checkbox" id="toggle-hide-labels"> <span data-i18n="lbl_hide_labels">Ẩn tên</span></label>
-                </div>
-            </div>
-
-            <!-- TAB 3: KHUNG -->
-            <div class="settings-tab-content" data-tab="tab-frame">
-                <div class="setting-group highlight-box">
-                    <label>🎨 Màu sắc Khung</label>
+                    <label>🎨 Màu sắc Khung & Icon</label>
                     <div class="color-swatch-row">
                         <div class="color-swatch">
-                            <span class="swatch-label" data-i18n="lbl_svg_color">Màu SVG</span>
-                            <input type="color" id="val-svg-color" value="#ffffff">
-                        </div>
-                        <div class="color-swatch">
-                            <span class="swatch-label" data-i18n="lbl_frame_color">Nền khung</span>
+                            <span class="swatch-label" data-i18n="lbl_frame_color">Màu nền Khung</span>
                             <input type="color" id="val-frame-color" value="#000000">
                         </div>
+                        <div class="color-swatch">
+                            <span class="swatch-label" data-i18n="lbl_svg_color">Màu Icon (SVG)</span>
+                            <input type="color" id="val-svg-color" value="#ffffff">
+                        </div>
                     </div>
-                </div>
-                <div class="setting-group highlight-box">
-                    <label data-i18n="lbl_frame_svg_size">🖼️ Khung Icon & SVG</label>
+                    
+                    <hr style="border: 0; border-top: 1px solid rgba(150,150,150,0.2); margin: 15px 0;">
+                    
                     <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_frame_size">Khung</span>
+                        <span class="slider-label" data-i18n="lbl_frame_size">Cỡ Khung</span>
                         <input type="range" id="val-frame-size" min="40" max="100" value="60">
                     </div>
                     <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_frame_radius">Bo góc</span>
+                        <span class="slider-label" data-i18n="lbl_frame_radius">Bo góc Khung</span>
                         <input type="range" id="val-frame-radius" min="0" max="50" value="22">
                     </div>
                     <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_svg_size">SVG</span>
+                        <span class="slider-label" data-i18n="lbl_frame_bg_opacity">Độ đậm Nền Khung</span>
+                        <input type="range" id="val-frame-bg-opacity" min="0" max="100" value="100">
+                    </div>
+                    
+                    <hr style="border: 0; border-top: 1px solid rgba(150,150,150,0.2); margin: 15px 0;">
+                    
+                    <div class="slider-item">
+                        <span class="slider-label" data-i18n="lbl_svg_size">Cỡ Icon (SVG)</span>
                         <input type="range" id="val-svg-size" min="16" max="60" value="28">
                     </div>
                     <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_svg_opacity">Độ đậm SVG</span>
+                        <span class="slider-label" data-i18n="lbl_svg_opacity">Độ đậm Icon</span>
                         <input type="range" id="val-svg-opacity" min="0" max="100" value="100">
                     </div>
                     <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_frame_bg_opacity">Độ đậm nền</span>
-                        <input type="range" id="val-frame-bg-opacity" min="0" max="100" value="100">
+                        <span class="slider-label" data-i18n="lbl_icon_spacing">Khoảng cách Icon tới chữ</span>
+                        <input type="range" id="val-icon-spacing" min="0" max="5" step="0.1" value="0">
                     </div>
+                </div>
+
+                <div class="setting-group highlight-box">
+                    <label>🗂️ Cài đặt dạng Danh sách</label>
+                    <div class="color-swatch-row">
+                        <div class="color-swatch">
+                            <span class="swatch-label" data-i18n="swatch_list_bg_short">Màu nền Dòng</span>
+                            <input type="color" id="val-list-bg" value="#1a1a1a">
+                        </div>
+                        <div class="color-swatch">
+                            <span class="swatch-label" data-i18n="swatch_list_svg_short">Màu Icon (Trong DS)</span>
+                            <input type="color" id="val-list-svg" value="#ffffff">
+                        </div>
+                    </div>
+                    <div class="slider-item" style="margin-top: 15px;">
+                        <span class="slider-label" data-i18n="lbl_list_bg_opacity">Độ mờ nền Dòng</span>
+                        <input type="range" id="val-list-bg-opacity" min="0" max="100" value="10">
+                    </div>
+                    <label style="margin-top: 10px;"><input type="checkbox" id="toggle-list-frame"> <span data-i18n="lbl_list_frame">Bật Khung bên trong Danh sách</span></label>
                 </div>
             </div>
 
             <!-- TAB 4: MEDIA -->
             <div class="settings-tab-content" data-tab="tab-media">
                 <div class="setting-group highlight-box">
-                    <label>🎨 Màu sắc Media</label>
+                    <label data-i18n="lbl_media_widget">🎶 Màu sắc & Kích thước Trình phát nhạc</label>
+                    
                     <div class="color-swatch-row">
                         <div class="color-swatch">
-                            <span class="swatch-label" data-i18n="lbl_media_bg_color">Màu khung</span>
+                            <span class="swatch-label" data-i18n="lbl_media_bg_color">Màu khung Media</span>
                             <input type="color" id="val-media-bg-color" value="#ffffff">
                         </div>
                         <div class="color-swatch">
-                            <span class="swatch-label" data-i18n="lbl_media_btn_color">Màu nút</span>
+                            <span class="swatch-label" data-i18n="lbl_media_btn_color">Màu nền nút Media</span>
                             <input type="color" id="val-media-btn-color" value="#ffffff">
                         </div>
                         <div class="color-swatch">
-                            <span class="swatch-label" data-i18n="lbl_media_svg_color">Màu SVG</span>
+                            <span class="swatch-label" data-i18n="lbl_media_svg_color">Màu Icon Media (SVG)</span>
                             <input type="color" id="val-media-svg-color" value="#ffffff">
                         </div>
                         <div class="color-swatch">
-                            <span class="swatch-label" data-i18n="lbl_thumb_color">Màu núm</span>
+                            <span class="swatch-label" data-i18n="lbl_thumb_color">Màu núm kéo</span>
                             <input type="color" id="val-thumb-color" value="#ffffff">
                         </div>
                     </div>
-                </div>
-                
-                <div class="setting-group highlight-box">
-                    <label data-i18n="lbl_media_widget">🎶 Trình Phát Nhạc</label>
+
+                    <hr style="border: 0; border-top: 1px solid rgba(150,150,150,0.2); margin: 15px 0;">
+
                     <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_media_width">Kích thước khung</span>
+                        <span class="slider-label" data-i18n="lbl_media_width">Chiều rộng khung</span>
                         <input type="range" id="val-media-width" min="50" max="100" value="90">
                     </div>
                     <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_media_bg_opacity">Độ mờ khung</span>
+                        <span class="slider-label" data-i18n="lbl_media_bg_opacity">Độ đậm khung Media</span>
                         <input type="range" id="val-media-bg-opacity" min="0" max="100" value="3">
                     </div>
                     <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_media_btn_size">Cỡ nút bấm</span>
+                        <span class="slider-label" data-i18n="lbl_media_btn_size">Cỡ nút Play/Pause</span>
                         <input type="range" id="val-media-btn-size" min="30" max="70" value="50">
                     </div>
                     <div class="slider-item">
-                        <span class="slider-label" data-i18n="lbl_thumb_size">Kích thước núm</span>
+                        <span class="slider-label" data-i18n="lbl_thumb_size">Cỡ núm kéo thanh trượt</span>
                         <input type="range" id="val-thumb-size" min="10" max="40" value="25">
                     </div>
                     
-                    <label style="margin-top: 10px; display: flex; align-items: center; gap: 5px;">
-                        <input type="checkbox" id="toggle-media-theme"> <span data-i18n="lbl_media_theme_sync">Đồng bộ chủ đề hệ thống</span>
+                    <hr style="border: 0; border-top: 1px solid rgba(150,150,150,0.2); margin: 15px 0 10px 0;">
+
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                        <input type="checkbox" id="toggle-media-theme"> <span data-i18n="lbl_media_theme_sync">Đồng bộ nút Media theo Chủ Đề Khung</span>
                     </label>
                     <label style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
                         <div style="display: flex; align-items: center; gap: 5px;">
                             <input type="checkbox" id="toggle-theme-dot" checked>
-                            <span data-i18n="lbl_theme_dot">Chủ đề núm kéo</span>
+                            <span data-i18n="lbl_theme_dot">Bật Chủ đề cho Núm kéo</span>
                         </div>
                         <button id="btn-thumb-theme" class="btn-plus-theme" type="button"><span>+</span></button>
                         <input type="hidden" id="val-thumb-theme" value="none">
@@ -316,6 +326,7 @@
         </div>
     </div>
 
+    <!-- Modals (Kho giao diện & Info) giữ nguyên cấu trúc -->
     <div class="info-overlay" id="theme-overlay"></div>
     <div id="theme-modal" class="macos-window" style="max-width: 320px;">
         <div class="macos-header">
@@ -356,7 +367,6 @@
             <div style="font-size: 14px; font-weight: bold; margin-left: 6px; color: #333;" data-i18n="info_title">Quick Control</div>
         </div>
         <div class="macos-body info-body">
-
             <div class="info-pill-tabs" id="info-pill-tabs">
                 <a href="https://browse.shortcuty.app/user/Sentechtipsvn" target="_blank" rel="noopener" class="info-pill">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
@@ -371,13 +381,11 @@
                     <span data-i18n="info_pill_about">Thông tin</span>
                 </button>
             </div>
-
             <div class="info-detail-panel" id="info-detail-panel">
                 <button class="info-back-btn" id="info-back-btn" type="button">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
                     <span data-i18n="info_back">Quay lại</span>
                 </button>
-
                 <div class="info-content">
                     <h3 class="info-app-name" data-i18n="info_app_name">Quick Control</h3>
                     <div class="info-version-row"><span data-i18n="info_version_label">Phiên bản</span><span class="info-version-value">1.0</span></div>
@@ -388,11 +396,10 @@
                     </div>
                     <div class="info-guide-box">
                         <div class="info-guide-title" data-i18n="info_guide_title">📖 Hướng dẫn sử dụng</div>
-                        <p data-i18n="info_guide_desc">1. Bấm vào nút bất kỳ...&#10;&#10;2. Nhấn vào biểu tượng ⚙️...&#10;&#10;3. Chọn Theme có sẵn...&#10;&#10;4. Vào mục Giao diện → Xuất...&#10;&#10;5. Slider âm lượng &amp; độ sáng...</p>
+                        <p data-i18n="info_guide_desc">1. Bấm vào nút bất kỳ...&#10;&#10;2. Nhấn vào biểu tượng ⚙️...</p>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -460,7 +467,7 @@
         })();
     </script>
 
-    <script src="js/theme.js?v=23"></script>
-    <script src="js/main.js?v=23"></script>
+    <script src="js/theme.js?v=24"></script>
+    <script src="js/main.js?v=24"></script>
 </body>
 </html>
