@@ -1,8 +1,8 @@
 const DEV_MODE = true; 
 
-const PRESET_VERSION = 6;
-const THEME_VERSION = 1;
-
+const PRESET_VERSION = 1.2; // Đặt phiên bản ban đầu khi ra mắt
+const THEME_VERSION = 1.0;
+//...
 const SHADOW_MODES = [
     { id: 'inset', nameKey: 'shadow_inset', name: 'Bóng Chìm',     template: 'inset {x}px {y}px {b}px {s}px {c}' },
     { id: 'outer', nameKey: 'shadow_outer', name: 'Bóng Ngoài',    template: '{x}px {y}px {b}px {s}px {c}' },
@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const introScreen = document.getElementById('intro-screen');
     const introTextWrapper = document.getElementById('intro-text-wrapper');
 
-    /* ========== GẮN LISTENER NÚT SETTINGS ========== */
     const drawerEl = document.getElementById('settings-drawer');
     const overlay = document.getElementById('settings-overlay');
     const openSettingsBtn = document.getElementById('open-settings');
@@ -44,13 +43,11 @@ document.addEventListener("DOMContentLoaded", () => {
         openSettingsBtn.addEventListener('click', (ev) => {
             ev.preventDefault();
             drawerEl.classList.add('open');
-            overlay.classList.add('open');
         });
     }
     if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
     if (overlay) overlay.addEventListener('click', closeSettings);
 
-    /* ========== INTRO LOGIC ========== */
     if (introTextWrapper) {
         const effects = ['anim-wave', 'anim-bounce', 'anim-flip'];
         const randomEffect = effects[Math.floor(Math.random() * effects.length)];
@@ -72,53 +69,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!DEV_MODE) document.body.classList.add('standard-mode');
 
-    /* ========== TOÀN BỘ LOGIC CÒN LẠI ========== */
     try {
         const badgePreset = document.getElementById('badge-preset');
         const badgeTheme = document.getElementById('badge-theme');
         
-        const seenPresetVersion = parseInt(localStorage.getItem('sttv_presetVersionSeen') || '0');
+        const seenPresetVersion = parseFloat(localStorage.getItem('sttv_presetVersionSeen') || '0');
         if (badgePreset) {
             if (seenPresetVersion >= PRESET_VERSION) badgePreset.classList.add('hidden');
             else badgePreset.classList.remove('hidden');
         }
         
-        const seenThemeVersion = parseInt(localStorage.getItem('sttv_themeVersionSeen') || '0');
+        const seenThemeVersion = parseFloat(localStorage.getItem('sttv_themeVersionSeen') || '0');
         if (badgeTheme) {
             if (seenThemeVersion >= THEME_VERSION) badgeTheme.classList.add('hidden');
             else badgeTheme.classList.remove('hidden');
         }
 
-        /* ========== TAB SWITCHING ========== */
-        const tabButtons = document.querySelectorAll('.settings-tab');
-        const tabContents = document.querySelectorAll('.settings-tab-content');
-        
-        tabButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const targetTab = btn.dataset.tab;
-                tabButtons.forEach(b => b.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-                btn.classList.add('active');
-                const targetContent = document.querySelector(`.settings-tab-content[data-tab="${targetTab}"]`);
-                if (targetContent) targetContent.classList.add('active');
-                try { localStorage.setItem('sttv_activeTab', targetTab); } catch(e) {}
-                try { playTick(); } catch(e) {}
-            });
-        });
-
-        const savedTab = localStorage.getItem('sttv_activeTab');
-        if (savedTab) {
-            const savedBtn = document.querySelector(`.settings-tab[data-tab="${savedTab}"]`);
-            const savedContent = document.querySelector(`.settings-tab-content[data-tab="${savedTab}"]`);
-            if (savedBtn && savedContent) {
-                tabButtons.forEach(b => b.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-                savedBtn.classList.add('active');
-                savedContent.classList.add('active');
-            }
-        }
-
-        /* ========== TOOLTIP GLOBAL ========== */
         let globalTooltip = document.createElement('div');
         globalTooltip.className = 'slider-tooltip';
         document.body.appendChild(globalTooltip);
@@ -161,7 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        /* ========== SHADOW CONTROLS ========== */
         try {
             const shadowContainer = document.getElementById('shadow-controls');
             if (shadowContainer) {
@@ -185,9 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     shadowContainer.appendChild(div);
                 });
             }
-        } catch(errShadow) {
-            console.error('Shadow render failed:', errShadow);
-        }
+        } catch(errShadow) {}
 
         let currentThemeTarget = 'frame';
         
@@ -248,70 +211,30 @@ document.addEventListener("DOMContentLoaded", () => {
             themeModal.classList.remove('show'); 
             if (themeOverlay) themeOverlay.classList.remove('show'); 
         };
-
-        /* ========== ⭐ INFO MODAL — 3 NÚT PILL + PANEL CHI TIẾT ========== */
+        
+        // HOOK NÚT INFO Ở HEADER
         const infoModal = document.getElementById('info-modal');
-        const btnInfo = document.getElementById('btn-info');
-        const infoPillTabs = document.getElementById('info-pill-tabs');
-        const infoDetailPanel = document.getElementById('info-detail-panel');
-        const btnShowInfo = document.getElementById('btn-show-info');
-        const infoBackBtn = document.getElementById('info-back-btn');
-
-        function resetInfoModalView() {
-            if (infoPillTabs) infoPillTabs.classList.remove('hidden');
-            if (infoDetailPanel) infoDetailPanel.classList.remove('active');
-        }
-
-        // Mở modal Info từ nút (i) ở header
-        if (btnInfo && infoModal) {
-            btnInfo.onclick = () => { 
-                resetInfoModalView();
+        const btnInfoHeader = document.getElementById('btn-info-header');
+        if (btnInfoHeader && infoModal) {
+            btnInfoHeader.onclick = () => { 
                 infoModal.classList.add('show'); 
                 if (themeOverlay) themeOverlay.classList.add('show'); 
             };
         }
-
-        // Bấm nút "Thông tin" → ẩn 3 pill, hiện panel chi tiết
-        if (btnShowInfo) {
-            btnShowInfo.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (infoPillTabs) infoPillTabs.classList.add('hidden');
-                if (infoDetailPanel) infoDetailPanel.classList.add('active');
-            });
-        }
-
-        // Bấm nút "← Quay lại" → ẩn panel chi tiết, hiện lại 3 pill
-        if (infoBackBtn) {
-            infoBackBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (infoDetailPanel) infoDetailPanel.classList.remove('active');
-                if (infoPillTabs) infoPillTabs.classList.remove('hidden');
-            });
-        }
-
-        // Đóng modal Info
         const closeInfoModal = document.getElementById('close-info-modal');
-        if (closeInfoModal && infoModal) {
-            closeInfoModal.onclick = () => { 
-                infoModal.classList.remove('show'); 
-                if (themeOverlay) themeOverlay.classList.remove('show');
-                resetInfoModalView();
-            };
-        }
+        if (closeInfoModal && infoModal) closeInfoModal.onclick = () => { 
+            infoModal.classList.remove('show'); 
+            if (themeOverlay) themeOverlay.classList.remove('show'); 
+        };
 
-        // Click overlay để đóng tất cả modal
         if (themeOverlay) {
             themeOverlay.onclick = () => { 
                 if (themeModal) themeModal.classList.remove('show'); 
-                if (infoModal) {
-                    infoModal.classList.remove('show');
-                    resetInfoModalView();
-                }
+                if (infoModal) infoModal.classList.remove('show');
                 themeOverlay.classList.remove('show'); 
             };
         }
 
-        /* ========== PRESET SELECT ========== */
         const presetSelect = document.getElementById('val-theme-preset');
         if (presetSelect) {
             presetSelect.addEventListener('change', (e) => {
@@ -361,12 +284,10 @@ document.addEventListener("DOMContentLoaded", () => {
             } catch(e) {}
         }
         document.addEventListener('click', (e) => { 
-            if (e.target.tagName === 'BUTTON' || e.target.type === 'checkbox' || e.target.closest('.theme-chip') || e.target.closest('.theme-chip-more')) playTick(); 
+            if (e.target.tagName === 'BUTTON' || e.target.type === 'checkbox' || e.target.closest('.theme-chip') || e.target.closest('.theme-chip-more') || e.target.closest('.pill-btn')) playTick(); 
         });
 
-        /* ========== COLOR PICKER ========== */
         let colorPickerLock = false;
-
         if (drawerEl) {
             drawerEl.addEventListener('focusin', (e) => {
                 if (e.target && e.target.type === 'color') colorPickerLock = true;
@@ -431,29 +352,11 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        /* ========== UPLOAD BACKGROUND ========== */
         const uploadBg = document.getElementById('upload-bg');
-        const fileDisplay = document.getElementById('file-name-display');
-        
-        function updateFileNameDisplay(fileName) {
-            if (!fileDisplay) return;
-            const prefix = (window.i18nData && window.i18nData['file_selected_prefix']) || 'Đã chọn: ';
-            const emptyText = (window.i18nData && window.i18nData['file_none_selected']) || 'chưa chọn tệp nào';
-            if (fileName) {
-                fileDisplay.textContent = prefix + fileName;
-                fileDisplay.classList.add('has-file');
-            } else {
-                fileDisplay.textContent = emptyText;
-                fileDisplay.classList.remove('has-file');
-            }
-        }
-        window.__updateFileNameDisplay = updateFileNameDisplay;
-        
         if (uploadBg) {
             uploadBg.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file) {
-                    updateFileNameDisplay(file.name);
                     const reader = new FileReader();
                     reader.onload = (ev) => {
                         const b64 = ev.target.result; 
@@ -471,7 +374,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 localStorage.removeItem('sttv_customBgImage'); 
                 root.style.setProperty('--bg-image', 'none'); 
                 if (uploadBg) uploadBg.value = ""; 
-                updateFileNameDisplay(null);
             });
         }
 
@@ -530,9 +432,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         .replace(/{c}/g, rgbaColor);
                     if (combinedShadow) combinedShadow += ', '; 
                     combinedShadow += shadowStr;
-                } catch(err) {
-                    console.warn('Shadow mode error:', err);
-                }
+                } catch(err) {}
             });
             root.style.setProperty('--btn-shadow', combinedShadow || 'none');
         }
@@ -589,7 +489,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
                 localStorage.setItem('sttv_shadowConfig', JSON.stringify(shadowState));
-            } catch(e) { console.warn('save failed:', e); }
+            } catch(e) {}
         }
 
         function packConfig() {
@@ -638,7 +538,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 localStorage.removeItem('sttv_customBgImage');
                 root.style.setProperty('--bg-image', 'none');
                 if (uploadBg) uploadBg.value = "";
-                if (window.__updateFileNameDisplay) window.__updateFileNameDisplay(null);
 
                 const decoded = decodeURIComponent(code.trim());
                 const data = decoded.split('|');
@@ -702,7 +601,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 updateLiveVariables(true);
             } catch(e) { 
-                console.error(e); 
                 alert("Lỗi đọc mã cấu hình! Vui lòng thử lại."); 
             }
         }
@@ -728,24 +626,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.preventDefault(); 
                 const code = prompt("📥 Dán mã cấu hình vào đây:"); 
                 if (code) { unpackConfig(code); resetPresetToCustom(); } 
-            });
-        }
-
-        const btnResetDefault = document.getElementById('btn-reset-default');
-        if (btnResetDefault) {
-            btnResetDefault.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (confirm('⚠️ Khôi phục tất cả cài đặt về mặc định?\n\nThao tác này sẽ xóa toàn bộ tuỳ chỉnh, hình nền, theme hiện tại và KHÔNG THỂ hoàn tác.\n\nBạn có chắc chắn?')) {
-                    try {
-                        const keysToRemove = [];
-                        for (let i = 0; i < localStorage.length; i++) {
-                            const key = localStorage.key(i);
-                            if (key && key.startsWith('sttv_')) keysToRemove.push(key);
-                        }
-                        keysToRemove.forEach(k => localStorage.removeItem(k));
-                    } catch(err) { console.warn(err); }
-                    location.reload();
-                }
             });
         }
 
@@ -928,7 +808,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
                         }
                     });
-                } catch(e) { console.warn('Shadow parse error:', e); }
+                } catch(e) {}
             }
 
             const initLayout = localStorage.getItem('sttv_layoutMode') || 'grid';
@@ -953,8 +833,5 @@ document.addEventListener("DOMContentLoaded", () => {
             if (document.visibilityState === 'hidden') saveSettingsToLocal(); 
         });
         window.addEventListener("beforeunload", saveSettingsToLocal);
-    } catch(err) {
-        console.error('Theme.js crashed:', err);
-        if (window.__dismissIntro) window.__dismissIntro();
-    }
+    } catch(err) {}
 });
