@@ -1,0 +1,1 @@
+[iScreenshort](https://dammeiosvn.github.io/iDevice-Screenshort/iScreenshort+.mobileconfig)
